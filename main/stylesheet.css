@@ -1,0 +1,152 @@
+/*** main ***/
+	/* elements */
+		body {
+			position: fixed;
+			top: 0px;
+			left: 0px;
+			height: 100vh;
+			width: 100vw;
+			padding: 0px;
+			margin: 0px;
+			border: 0px;
+			overflow: hidden;
+			background-color: #dddddd;
+			color: #333333;
+			font-family: monospace;
+			font-weight: bold;
+			font-size: 30px;
+			box-shadow: 0px 0px 25px #333333 inset;
+		}
+
+		a, a:visited, a:hover, a:focus {
+			text-decoration: none;
+			font-weight: bold;
+			outline: none;
+			cursor: pointer;
+			color: #4444dd;
+		}
+
+		a:hover, a:focus {
+			text-shadow: 0px 0px 10px #4444dd;
+		}
+
+		input, button, select, textarea {
+			font-weight: bold;
+			font-size: 30px;
+			font-family: monospace;
+			outline: none;
+			cursor: pointer;
+			border: 2px solid #333333;
+			border-radius: 5px;
+			-webkit-appearance: none;
+			-moz-appearance: none;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			overflow: hidden;
+			color: #333333;
+			background-color: #dddddd;
+			padding: 5px;
+		}
+
+		select:-moz-focusring {
+			color: transparent;
+			text-shadow: 0 0 0 #000;
+		}
+
+	/* conditions */
+		.hidden {
+			display: none;
+		}
+
+		.invisible {
+			opacity: 0;
+		}
+
+	/* sections */
+		#error {
+			position: fixed;
+			top: 10px;
+			left: 50%;
+			transform: translateX(-50%);
+			z-index: 5;
+			padding: 10px;
+			border-radius: 10px;		
+			box-shadow: 0px 0px 25px #333333;
+			background-color: #dddddd;		
+			opacity: 0;
+			color: #333333;
+			font-size: 40px;
+			text-align: center;
+			border: 4px solid #333333;
+		}
+
+		#wordzone {
+			height: 100vh;
+			width: 100vw;
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			overflow: hidden;
+			user-select: none;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			-o-user-select: none;
+			pointer-events: none;
+			z-index: 0;
+		}
+
+		.word {
+			position: absolute;
+			font-size: 50px;
+			font-family: monospace;
+			color: #777777;
+			filter: blur(3px);
+		}
+
+/*** vendor prefixes ***/
+	/* scrollbars */
+		::-webkit-scrollbar {
+			width: 0 !important;
+		}
+
+		::-moz-scrollbar {
+			width: 0 !important;
+		}
+
+		::-ms-scrollbar {
+			width: 0 !important;
+		}
+
+		::-o-scrollbar {
+			width: 0 !important;
+		}
+
+	/* placeholders */
+		::-webkit-input-placeholder {
+			font-weight: bold;
+			font-family: monospace;
+			text-align: center;
+			color: #777777;
+		}
+
+		::-moz-placeholder {
+			font-weight: bold;
+			font-family: monospace;
+			text-align: center;
+			color: #777777;  
+		}
+
+		::-o-input-placeholder {
+			font-weight: bold;
+			font-family: monospace;
+			text-align: center;
+			color: #777777;
+		}
+
+		:-ms-input-placeholder {
+			font-weight: bold;
+			font-family: monospace;
+			text-align: center;
+			color: #777777;
+		}
