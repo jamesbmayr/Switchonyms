@@ -6,39 +6,42 @@
 /*** creates ***/
 	/* createGame */
 		module.exports.createGame = createGame
-		function createGame(request, db, callback) {
+		function createGame(request, callback) {
 			try {
-				// create game
-					request.game = {
-						id: main.generateRandom(null, 4),
-						created: new Date().getTime(),
-						updated: new Date().getTime(),
-						state: {
-							locked:  false,
+				if (!request.game || !request.game.id) {
+					callback({success: false, message: "no game"})
+				}
+				else {
+					// create game
+						request.game.created = new Date().getTime()
+						request.game.updated = new Date().getTime()
+						request.state = {
 							start:   false,
 							end:     false,
-							victory: false,
+							victory: [],
+							count:   0,
+							phase:   0,
 							round:   0
-						},
-						players: [],
-						words: {
-							nouns: [],
-							verbs: [],
+						}
+						request.game.players = []
+						request.game.words = {
+							nouns:      [],
+							verbs:      [],
 							adjectives: []
 						}
-					}
 
-				// create player
-					var player = createPlayer(request)
-					request.game.players[request.session.id] = player
+					// create player
+						var player = createPlayer(request)
+						request.game.players[request.session.id] = player
 
-				// add to database
-					while (db[request.game.id]) {
-						request.game.id = main.generateRandom(null, 4)
-					}
-					db[request.game.id] = request.game
-				
-				callback({success: true, message: "game created", location: "../../game/" + request.game.id})
+					// add to database
+						while (db[request.game.id]) {
+							request.game.id = main.generateRandom(null, 4)
+						}
+						db[request.game.id] = request.game
+					
+					callback({success: true, message: "game created", location: "../../game/" + request.game.id})
+				}
 			}
 			catch (error) {
 				main.logError(error)
@@ -72,17 +75,23 @@
 					}
 
 				// create player
-					var player = {
-						id: request.session.id,
-						name: name,
-						color: main.chooseRandom(colors),
-						points: 0,
-						word: null,
-						connection: null
+					var player = {id: request.session.id}
+						player.name = name
+						player.color = main.chooseRandom(colors)
+						player.state = {
+							points:    0,
+							words:     [null, null],
+							matches:   [null, null],
+							selecting: null,
+							switching: false,
+							counter:   0,
+							loop:      null
+						}
+						player.connection = null
 					}
 
 				// return value
-					return player
+					return player || {}
 			}
 			catch (error) {
 				main.logError(error)
@@ -93,35 +102,23 @@
 /*** joins ***/
 	/* joinGame */
 		module.exports.joinGame = joinGame
-		function joinGame(request, db, callback) {
+		function joinGame(request, callback) {
 			try {
-				if (!request.post || !request.post.gameid) {
-					callback({success: false, message: "invalid game id"})
-				}
-				else if (!main.isNumLet(request.post.gameid) || (request.post.gameid.length !== 4)) {
-					callback({success: false, message: "gameid must be 4 letters and numbers"})
-				}
-				else if (!db[request.post.gameid]) {
-					callback({success: false, message: "game not found"})
-				}
-				else if (db[request.post.gameid].state.end) {
+				if (request.game.state.end) {
 					callback({success: false, message: "game already ended"})
 				}
-				else if (!db[request.post.gameid].players[request.session.id] && (db[request.post.gameid].players.length >= 10)) {
+				else if (!request.game.players[request.session.id] && (Object.keys(request.game.players).length >= 10)) {
 					callback({success: false, message: "game is at capacity"})
 				}
-				else if (!db[request.post.gameid].players[request.session.id] && db[request.post.gameid].state.start) {
+				else if (!request.game.players[request.session.id] && request.game.state.start) {
 					callback({success: false, message: "game already started"})
 				}
-				else if (db[request.post.gameid].players[request.session.id]) {
-					callback({success: true, message: "rejoining game", location: "../../game/" + request.post.gameid})
+				else if (request.game.players[request.session.id]) {
+					callback({success: true, message: "rejoining game", location: "../../game/" + request.game.id})
 				}
 				else {
-					request.game = db[request.post.gameid]
-
 					// create player
-						var player = createPlayer(request)
-						request.game.players[request.session.id] = player
+						request.game.players[request.session.id] = createPlayer(request)
 
 					callback({success: true, message: "game joined", location: "../../game/" + request.game.id})
 				}

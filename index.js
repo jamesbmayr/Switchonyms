@@ -6,7 +6,6 @@
 	var main = require("./main/logic")
 	var game = require("./game/logic")
 	var home = require("./home/logic")
-	var db   = {}
 
 /*** server ***/
 	var port = main.getEnvironment("port")
@@ -26,6 +25,12 @@
 		autoAcceptConnections: false
 	})
 		socket.on("request", handleSocket)
+
+/*** database ***/
+	var db   = {}
+	var dbLoop = setInterval(function() {
+		main.cleanDatabase(db)
+	}, (1000 * 60 * 60))
 
 /*** handleRequest ***/
 	function handleRequest(request, response) {
@@ -170,7 +175,6 @@
 									case (/^\/$/).test(request.url):
 										try {
 											main.renderHTML(request, "./home/index.html", function (html) {
-												console.log("WHAT ABOUT HERE")
 												response.end(html)
 											})
 										}
@@ -200,16 +204,6 @@
 										catch (error) {_404(error)}
 									break
 
-								// data
-									case (/^\/data\/?$/).test(request.url):
-										try {
-											main.renderHTML(db, "./about/data.html", function (html) {
-												response.end(html)
-											})
-										}
-										catch (error) {_404(error)}
-									break
-
 								// others
 									default:
 										_404()
@@ -218,14 +212,17 @@
 						}
 
 					// post
-						else if (request.method == "POST" && request.post.action !== undefined) {
+						else if (request.method == "POST" && request.post.action) {
 							response.writeHead(200, {"Content-Type": "text/json"})
 
 							switch (request.post.action) {
 								// home
 									case "createGame":
 										try {
-											home.createGame(request, db, function (data) {
+											request.game = {id: main.generateRandom(null, 4)}
+											db[request.game.id] = request.game
+
+											home.createGame(request, function (data) {
 												response.end(JSON.stringify(data))
 											})
 										}
@@ -234,9 +231,19 @@
 
 									case "joinGame":
 										try {
-											home.joinGame(request, db, function (data) {
-												response.end(JSON.stringify(data))
-											})
+											if (!request.post.gameid || (request.post.gameid.length !== 4) || !main.isNumLet(request.post.gameid)) {
+												response.end(JSON.stringify({success: false, message: "gameid must be 4 letters and numbers"}))
+											}
+											else if (!db[request.post.gameid]) {
+												response.end(JSON.stringify({success: false, message: "game not found"}))
+											}
+											else {
+												request.game = db[request.post.gameid]
+
+												home.joinGame(request, function (data) {
+													response.end(JSON.stringify(data))
+												})
+											}
 										}
 										catch (error) {_403(error)}
 									break
@@ -250,7 +257,7 @@
 
 					// others
 						else {
-							_403()
+							_403("unknown route")
 						}
 				}
 				catch (error) {
@@ -339,6 +346,10 @@
 							request.reject()
 							_400("unable to find game")
 						}
+						else if (!request.game.players[request.session.id]) {
+							request.reject()
+							_400("unable to find player in game")
+						}
 						else {
 							request.game.players[request.session.id].connection = request.connection
 						}
@@ -350,10 +361,10 @@
 								request.game.players[request.session.id].connection = null
 
 							// if no players
-								var connections = Object.keys(request.game.players).filter(function (p) {
+								var players = Object.keys(request.game.players).filter(function (p) {
 									return request.game.players[p].connection
 								})
-								if (!connections.length) {
+								if (!players.length) {
 									delete db[request.game.id]
 								}
 						})
@@ -373,13 +384,20 @@
 							}
 							else {
 								switch (request.post.action) {
-									case "selectSwitch":
+									case "submitBegin":
 										try {
-											game.selectSwitch(request, function(data) {
-												var players = Object.keys(request.game.players)
-												for (var p in players) {
-													var connection = request.game.players[players[p]].connection
-														connection.sendUTF(JSON.stringify(data))
+											game.submitBegin(request, function (recipients, data) {
+												for (var r in recipients) {
+													request.game.players[recipients[r]].connection.sendUTF(JSON.stringify(data))
+												}
+											})
+										}
+
+									case "submitSwitch":
+										try {
+											game.submitSwitch(request, function (recipients, data) {
+												for (var r in recipients) {
+													request.game.players[recipients[r]].connection.sendUTF(JSON.stringify(data))
 												}
 											})
 										}
@@ -388,13 +406,11 @@
 										}
 									break
 
-									case "selectOpponent":
+									case "submitOpponent":
 										try {
-											game.selectOpponent(request, function(data) {
-												var players = Object.keys(request.game.players)
-												for (var p in players) {
-													var connection = request.game.players[players[p]].connection
-														connection.sendUTF(JSON.stringify(data))
+											game.submitOpponent(request, function (recipients, data) {
+												for (var r in recipients) {
+													request.game.players[recipients[r]].connection.sendUTF(JSON.stringify(data))
 												}
 											})
 										}

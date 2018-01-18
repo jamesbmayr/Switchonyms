@@ -154,7 +154,6 @@
 		}
 		
 	/* socket */
-		var socket = null
 		function createSocket() {
 			socket = new WebSocket(location.href.replace("http","ws"))
 
@@ -176,9 +175,12 @@
 			// message
 				socket.onmessage = function(message) {
 					try {
-						var data = JSON.parse(message.data)
-						if (data && typeof data == "object") {
-							paths = data || {}
+						var post = JSON.parse(message.data)
+						if (post && (typeof post == "object") && post.action) {
+							routeSocket(post)
+						}
+						else {
+							console.log(error)
 						}
 					}
 					catch (error) {
