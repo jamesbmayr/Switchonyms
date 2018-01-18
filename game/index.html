@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Switchonyms</title>
+		<script node> getAsset("meta") </script>node>
+		<script node> getAsset("google fonts") </script>node>
+		<link rel="shortcut icon" type="image/png" href="logo.png"/>
+		<link rel="stylesheet" type="text/css" href="./home/stylesheet.css"/>
+		<script type="text/javascript" src="./home/script.js"></script>
+		<script node>
+			var player = request.game.players[request.session.id]
+			var opponents = Object.keys(request.game.players).filter(function (p) {
+				return p !== request.session.id
+			})
+		</script>node>
+	</head>
+	<body>
+		<div id="error" class="hidden"></div>
+		<div id="container">
+			<script node> /* card */
+				var content = ""
+
+				content += "<div id='card' ellipsis='" + (player.state.words[0] ? false : true) + "' phase='" + String(request.game.state.phase) + "' round='" + String(request.game.state.round) + ">"
+				content += 		"<button id='begin'>begin</button>"
+				content += 		"<div id='word'>" + (player.state.words[0] ? player.state.words.join("&") : "") + "</div>"
+				content += 		"<button id='switch'>&harr;</button"
+				content += "</div>"
+
+				content || ""					
+			</script>node>
+			
+			<script node> /* player */
+				var content = ""
+
+				content += "<div class='player' id='" + player.id + "' color='" + player.color + "'>"
+				content += 		"<div class='score'>" + player.state.score + "</div>"
+				content +=		"<div class='name'>" + player.name + "</div>"
+				content += "</div>"
+
+				content || ""
+			</script>node>
+
+			<script node> /* opponents */
+				var content = ""
+
+				content += "<div id='opponents'>"
+				for (var o in opponents) {
+					var opponent = request.game.players[opponents[o]]
+					content += "<button class='opponent' id='" + opponent.id + "' color='" + opponent.color + "'>"
+					content += 		"<div class='name'>" + opponent.name + "</div>"
+					content += "</button>"
+				}
+				content += "</div>"
+
+				content || ""
+			</script>node>
+		</div>
+	</body>
+</html>

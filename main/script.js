@@ -177,7 +177,7 @@
 					try {
 						var post = JSON.parse(message.data)
 						if (post && (typeof post == "object") && post.action) {
-							routeSocket(post)
+							receivePost(post)
 						}
 						else {
 							console.log(error)
