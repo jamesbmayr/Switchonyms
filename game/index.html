@@ -12,6 +12,7 @@
 			var opponents = Object.keys(request.game.players).filter(function (p) {
 				return p !== request.session.id
 			})
+			null
 		</script>node>
 	</head>
 	<body>
@@ -20,10 +21,10 @@
 			<script node> /* card */
 				var content = ""
 
-				content += "<div id='card' ellipsis='" + (player.state.words[0] ? false : true) + "' phase='" + String(request.game.state.phase) + "' round='" + String(request.game.state.round) + ">"
+				content += "<div id='card' ellipsis='" + (player.state.words[0] ? false : true) + "' phase='" + String(request.game.state.phase) + "' round='" + String(request.game.state.round) + "'>"
 				content += 		"<button id='begin'>begin</button>"
 				content += 		"<div id='word'>" + (player.state.words[0] ? player.state.words.join("&") : "") + "</div>"
-				content += 		"<button id='switch'>&harr;</button"
+				content += 		"<button id='switch'>&harr;</button>"
 				content += "</div>"
 
 				content || ""					
@@ -33,7 +34,7 @@
 				var content = ""
 
 				content += "<div class='player' id='" + player.id + "' color='" + player.color + "'>"
-				content += 		"<div class='score'>" + player.state.score + "</div>"
+				content += 		"<div class='score'>" + (player.state.points || 0) + "</div>"
 				content +=		"<div class='name'>" + player.name + "</div>"
 				content += "</div>"
 

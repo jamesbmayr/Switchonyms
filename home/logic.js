@@ -15,7 +15,7 @@
 					// create game
 						request.game.created = new Date().getTime()
 						request.game.updated = new Date().getTime()
-						request.state = {
+						request.game.state = {
 							start:   false,
 							end:     false,
 							victory: [],
@@ -33,12 +33,6 @@
 					// create player
 						var player = createPlayer(request)
 						request.game.players[request.session.id] = player
-
-					// add to database
-						while (db[request.game.id]) {
-							request.game.id = main.generateRandom(null, 4)
-						}
-						db[request.game.id] = request.game
 					
 					callback({success: true, message: "game created", location: "../../game/" + request.game.id})
 				}
@@ -88,7 +82,6 @@
 							loop:      null
 						}
 						player.connection = null
-					}
 
 				// return value
 					return player || {}

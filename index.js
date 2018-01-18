@@ -36,11 +36,13 @@
 	function handleRequest(request, response) {
 		// collect data
 			var data = ""
-			request.on("data", function (chunk) { data += chunk })
+			request.on("data", function (chunk) {
+				data += chunk
+			})
 			request.on("end", parseRequest)
 
 		/* parseRequest */
-			function parseRequest(data) {
+			function parseRequest() {
 				try {
 					// get request info
 						request.get    = qs.parse(request.url.split("?")[1]) || {}
@@ -195,11 +197,19 @@
 									case (/^\/game\/[a-zA-Z0-9]{4}$/).test(request.url):
 										try {
 											var id = request.path[2].toLowerCase()
-											request.game = db[id] || {}
+											request.game = db[id] || false
 
-											main.renderHTML(request, "./game/index.html", function (html) {
-												response.end(html)
-											})
+											if (!request.game) {
+												_302("../../")
+											}
+											else if (!request.game.players[request.session.id]) {
+												_302("../../")
+											}
+											else {
+												main.renderHTML(request, "./game/index.html", function (html) {
+													response.end(html)
+												})
+											}
 										}
 										catch (error) {_404(error)}
 									break
@@ -219,7 +229,11 @@
 								// home
 									case "createGame":
 										try {
-											request.game = {id: main.generateRandom(null, 4)}
+											do {
+												id = main.generateRandom(null, 4)
+											}
+											while (db[id])
+											request.game = {id: id}
 											db[request.game.id] = request.game
 
 											home.createGame(request, function (data) {
@@ -391,6 +405,9 @@
 													request.game.players[recipients[r]].connection.sendUTF(JSON.stringify(data))
 												}
 											})
+										}
+										catch (error) {
+											_400(error)
 										}
 
 									case "submitSwitch":

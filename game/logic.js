@@ -38,7 +38,7 @@
 					}
 			}
 			catch (error) {
-				callback([request.session.id], {success: false, message: "unable to submit begin"}})
+				callback([request.session.id], {success: false, message: "unable to submit begin"})
 			}
 		}
 
@@ -76,7 +76,7 @@
 					}
 			}
 			catch (error) {
-				callback([request.session.id], {success: false, message: "unable to submit switch"}})
+				callback([request.session.id], {success: false, message: "unable to submit switch"})
 			}
 		}
 
@@ -132,7 +132,7 @@
 
 										// instructions
 											beginCountdown(request, function() {
-												callback([request.session.id, request.post.opponent]], {success: true, message: "get someone to guess your word - but don't say it!"})
+												callback([request.session.id, request.post.opponent], {success: true, message: "get someone to guess your word - but don't say it!"})
 												callback(others, {success: true, message: "guess the clue-givers' words to get points!"})
 
 												// begin round
@@ -359,7 +359,7 @@
 					clearInterval(beginLoop)
 					callback()
 				}
-			}
+			})
 		}
 
 	/* beginMatchPhase */

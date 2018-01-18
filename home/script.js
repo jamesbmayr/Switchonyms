@@ -57,7 +57,7 @@
 				// data
 					var post = {
 						action: "joinGame",
-						gameCode: gameCode,
+						gameid: gameCode,
 						name: name
 					}
 

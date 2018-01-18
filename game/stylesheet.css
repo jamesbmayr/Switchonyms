@@ -1,0 +1,236 @@
+/*** page ***/
+	body {
+		position: absolute;
+		top: 0px;
+		left: 0px;
+		height: 100vh;
+		width: 100vw;
+		margin: 0px;
+		padding: 0px;
+		background-color: #dddddd;
+		color: #333333;
+		font-family: monospace;
+		font-size: 50px;
+		box-shadow: 0px 0px 50px #333333 inset;
+		overflow: hidden;
+	}
+
+	/* effects */
+		.hidden {
+			opacity: 0;
+			pointer-events: none;
+		}
+
+	/* container */
+		#container {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translateX(-50%) translateY(-50%);
+			text-align: center;
+			max-height: 90vh;
+			max-width: 85vw;
+		}
+
+/*** card ***/
+	/* ellipsis */
+		#ellipsis {
+			width: 100%;
+			text-align: center;
+			color: #777777;
+			font-size: 50px;
+			position: absolute;
+			top: 0px;
+			left: 0px;
+			z-index: -1;
+			user-select: none;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			-o-user-select: none;
+		}
+
+	/* word */
+		#word {
+			display: block;
+			font-size: 30px;
+			padding: 20px 4px 20px 4px;
+			width: calc(100% - 12px);
+			color: #dddddd;
+			background-color: #333333;
+			border: 2px solid #333333;
+			border-radius: 10px;
+			user-select: none;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			-o-user-select: none;
+			overflow: hidden;
+			text-overflow: ellipsis;
+		}
+
+	/* switch */
+		#switch {
+			position: absolute;
+			top: -25px;
+			right: -25px;
+			height: 65px;
+			width: 65px;
+			font-size: 30px;
+			background-color: #dddddd;
+			color: #333333;
+			border-radius: 100%;
+			line-height: 1;
+			border: 2px solid #333333;
+			cursor: pointer;
+			outline: none;
+			user-select: none;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			-o-user-select: none;
+			opacity: 0.8;
+		}
+
+		#switch:hover {
+			background-color: #333333;
+			color: #dddddd;
+			border-color: #333333;
+			opacity: 1;
+		}
+
+	/* requests */
+		#requests {
+			width: 100%;
+			display: flex;
+			flex-flow: row wrap;
+			text-align: center;
+			margin-top: 20px;
+		}
+
+		.request {
+			display: inline-block;
+			width: calc(50% - 4px);
+			margin: 2px;
+			background-color: #dddddd;
+			color: #333333;
+			border: 2px solid #333333;
+			border-radius: 10px;
+			font-family: monospace;
+			font-size: 20px;
+			padding: 5px 10px 10px 10px;
+			outline: none;
+			user-select: none;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			-o-user-select: none;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			font-family: monospace;
+			cursor: pointer;
+		}
+
+		.request span {
+			font-size: 30px;
+			line-height: 1;
+			margin-right: 5px;
+		}
+
+		.request:hover {
+			color: #dddddd;
+			background-color: #333333;
+		}
+
+/*** players ***/
+	#players {
+		display: flex;
+		flex-flow: row wrap;
+		text-align: center;
+	}
+
+	/* player */
+		.player {
+			display: block;
+			font-size: 30px;
+			text-align: left;
+			padding: 5px;
+			white-space: nowrap;
+			background-color: #dddddd;
+			color: #333333;
+			border: 2px solid #333333;
+			border-radius: 10px;
+			order: 1;
+			width: 100%;
+			margin: 20px 2px 5px 2px;
+			outline: none;
+			user-select: none;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			-o-user-select: none;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			font-family: monospace;
+		}
+
+		.player .name {
+			display: inline-block;
+		}
+
+		.player .score {
+			display: inline-block;
+			background-color: #333333;
+			color: #dddddd;
+			border-radius: 5px;
+			padding: 5px;
+		}
+
+	/* opponents */
+		.opponent {
+			margin: 2px;
+			display: inline-block;
+			font-size: 20px;
+			text-align: left;
+			padding: 5px;
+			white-space: nowrap;
+			order: 2;
+			width: calc(50% - 4px);
+			color: #333333;
+			border: 2px solid #333333;
+			border-radius: 10px;
+			background-color: #dddddd;
+			cursor: pointer;
+			outline: none;
+			user-select: none;
+			-webkit-user-select: none;
+			-moz-user-select: none;
+			-ms-user-select: none;
+			-o-user-select: none;
+			overflow: hidden;
+			text-overflow: ellipsis;
+			font-family: monospace;
+		}
+
+		.opponent:hover{
+			background-color: #333333;
+			border-color: #333333;
+			color: #dddddd;
+		}
+
+		.opponent .name {
+			display: inline-block;
+		}
+
+		.opponent .score {
+			background-color: #333333;
+			color: #dddddd;
+			padding: 5px;
+			border-radius: 5px;
+			display: inline-block;
+		}
+
+		.opponent:hover .score {
+			background-color: #dddddd;
+			color: #333333;
+		}
