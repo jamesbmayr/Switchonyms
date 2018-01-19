@@ -56,15 +56,17 @@
 					}
 
 				// get name
+					var opponents = Object.keys(request.game.players) || []
 					var name = main.sanitizeString(request.post.name) || null
 						name = name || "player " + (Object.keys(request.game.players).length + 1)
-					if (name.length > 16) {
-						name = name.slice(0,16)
+					if (name.length > 10) {
+						name = name.slice(0,10)
 					}
-					else if (name.length < 4) {
-						while (name.length < 4) {
-							name = name + "_"	
-						}
+					else if (!name.length) {
+						name = main.generateRandom(null,5)
+					}
+					else if (opponents.filter(function (o) { return request.game.players[opponents[o]].name == name }).length) {
+						name = name + " 2"
 					}
 
 				// create player
@@ -87,7 +89,7 @@
 			}
 			catch (error) {
 				main.logError(error)
-				callback({success: false, message: "unable to create player"})
+				return false
 			}
 		}	
 
