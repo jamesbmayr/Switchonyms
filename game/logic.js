@@ -182,8 +182,12 @@
 
 							// round end ?
 								else {
-									// clear pointsLoops
+									// clear pointsLoops & show points
+										var pointsList = []
+										var clearList  = []
 										for (var p in players) {
+											pointsList.push({id: players[p], points: request.game.players[players[p]].state.points})
+											clearList.push( {id: players[p], points: null})
 											resetPlayer(request.game.players[players[p]])
 										}
 
@@ -192,9 +196,9 @@
 											return ((p !== request.session.id) && (p !== request.post.opponent))
 										})
 
-										callback([request.post.opponent], {success: true, message: "great guess! that's the last word!", points: request.game.players[request.post.opponent].state.points})
-										callback([request.session.id   ], {success: true, message: "got it! that's the last word!"})
-										callback([others[o]],             {success: true, message: "that's the last word!"})
+										callback([request.post.opponent], {success: true, message: "great guess! that's the last word!", points: request.game.players[request.post.opponent].state.points, opponents: pointsList})
+										callback([request.session.id   ], {success: true, message: "got it! that's the last word!", opponents: pointsList})
+										callback([others[o]],             {success: true, message: "that's the last word!", opponents: pointsList})
 
 									// match phase
 										if (request.game.state.round < 3) {
@@ -207,7 +211,7 @@
 															beginMatchPhase(request)
 
 															for (var p in players) {
-																callback(players, {success: true, message: "matching time", phase: 0, round: request.game.state.round, words: request.game.players[players[p]].state.words})
+																callback(players, {success: true, message: "matching time", phase: 0, round: request.game.state.round, words: request.game.players[players[p]].state.words, opponents: clearList})
 															}
 														})
 												})
@@ -221,8 +225,17 @@
 
 													// begin end		
 														beginCountdown(request, function() {
-															var winners = beginVictoryPhase(request)
-															callback(players, {success: true, message: "victory: " + winners.join(" & ") + "", phase: 2, round: 4, ellipsis: true})
+															// find winners
+																var winners = beginVictoryPhase(request)
+
+															// get pointsList
+																var pointsList = []
+																for (var p in players) {
+																	pointsList.push({id: players[p], points: request.game.players[players[p]].state.points})
+																}
+
+															// send message
+																callback(players, {success: true, message: "victory: " + winners.join(" & ") + "", phase: 2, round: 4, ellipsis: true, opponents: pointsList})
 														})
 												})
 										}
@@ -236,6 +249,73 @@
 		}
 
 /*** players ***/
+	/* addPlayer */
+		module.exports.addPlayer = addPlayer
+		function addPlayer(request, callback) {
+			try {
+				if (!request.game) {
+					request.reject()
+					callback([request.session.id], {success: false, message: "unable to find game"})
+				}
+				else if (!request.game.players[request.session.id]) {
+					request.reject()
+					callback([request.session.id], {success: false, message: "unable to find player in game"})
+				}
+				else {
+					// save connection
+						request.game.players[request.session.id].connection = request.connection
+
+					// new player
+						var player = {
+							id: request.session.id,
+							name: request.game.players[request.session.id].name,
+							color: request.game.players[request.session.id].color
+						}
+
+					// send
+						var opponents = Object.keys(request.game.players).filter(function (p) {
+							return p !== request.session.id
+						})
+						callback(opponents, {success: true, opponents: [player]})
+				}
+			}
+			catch (error) {
+				callback([request.session.id], {success: false, message: "unable to add player"})
+			}
+		}
+
+	/* removePlayer */
+		module.exports.removePlayer = removePlayer
+		function removePlayer(request, callback) {
+			try {
+				// remove player connection (keep data)
+					main.logStatus("[CLOSED]: " + request.path.join("/") + " @ " + (request.ip || "?"))
+					request.game.players[request.session.id].connection = null
+
+				// delete game ?
+					var opponents = Object.keys(request.game.players).filter(function (p) {
+						return request.game.players[p].connection
+					})
+
+					if (!opponents.length) {
+						callback({success: true, delete: true})
+					}
+				
+				// still players
+					else {
+						var player = {
+							id: request.session.id,
+							remove: true
+						}
+
+						callback(opponents, {success: true, opponents: [player]})
+					}
+			}
+			catch (error) {
+				callback([request.session.id], {success: false, message: "unable to remove player"})
+			}
+		}
+
 	/* resetPlayer */
 		module.exports.resetPlayer = resetPlayer
 		function resetPlayer(player) {

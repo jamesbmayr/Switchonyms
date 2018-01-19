@@ -353,34 +353,32 @@
 		/* routeSocket */
 			function routeSocket() {
 				try {
+					request.game = db[request.path[2]] || false
+					
 					// on connect
-						request.game = db[request.path[2]] || false
-						
-						if (!request.game) {
-							request.reject()
-							_400("unable to find game")
-						}
-						else if (!request.game.players[request.session.id]) {
-							request.reject()
-							_400("unable to find player in game")
-						}
-						else {
-							request.game.players[request.session.id].connection = request.connection
-						}
+						game.addPlayer(function (recipients, data) {
+							if (!data.success) {
+								_400(data.message || "unable to connect")
+							}
+							else {
+								for (var r in recipients) {
+									request.game.players[recipients[r]].connection.sendUTF(JSON.stringify(data))
+								}
+							}
+						})
 
 					// on close
 						request.connection.on("close", function (reasonCode, description) {
-							// remove player from game
-								main.logStatus("[CLOSED]: " + request.path.join("/") + " @ " + (request.ip || "?"))
-								request.game.players[request.session.id].connection = null
-
-							// if no players
-								var players = Object.keys(request.game.players).filter(function (p) {
-									return request.game.players[p].connection
-								})
-								if (!players.length) {
+							game.removePlayer(request, function (recipients, data) {
+								if (data.delete) {
 									delete db[request.game.id]
 								}
+								else {
+									for (var r in recipients) {
+										request.game.players[recipients[r]].connection.sendUTF(JSON.stringify(data))
+									}
+								}
+							})
 						})
 					
 					// on message
@@ -406,9 +404,8 @@
 												}
 											})
 										}
-										catch (error) {
-											_400(error)
-										}
+										catch (error) {_400(error)}
+									break
 
 									case "submitSwitch":
 										try {
@@ -418,9 +415,7 @@
 												}
 											})
 										}
-										catch (error) {
-											_400(error)
-										}
+										catch (error) {_400(error)}
 									break
 
 									case "submitOpponent":
@@ -431,9 +426,7 @@
 												}
 											})
 										}
-										catch (error) {
-											_400(error)
-										}
+										catch (error) {_400(error)}
 									break
 
 									default:

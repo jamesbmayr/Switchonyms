@@ -25,6 +25,7 @@
 				content += 		"<button id='begin'>begin</button>"
 				content += 		"<div id='word'>" + (player.state.words[0] ? player.state.words.join("&") : "") + "</div>"
 				content += 		"<button id='switch'>&harr;</button>"
+				content += 		"<a id='again' href='../../'>play again?</a>"
 				content += "</div>"
 
 				content || ""					
@@ -48,6 +49,7 @@
 				for (var o in opponents) {
 					var opponent = request.game.players[opponents[o]]
 					content += "<button class='opponent' id='" + opponent.id + "' color='" + opponent.color + "'>"
+					content += 		"<div class='score'>" + (request.game.state.end ? opponent.state.points : "") + "</div>"
 					content += 		"<div class='name'>" + opponent.name + "</div>"
 					content += "</button>"
 				}

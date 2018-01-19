@@ -76,7 +76,7 @@
 	/* receivePost */
 		function receivePost(post) {
 			// content
-				if (post.points) {
+				if (post.points !== undefined) {
 					var score = Array.from(Array.from(document.querySelectorAll(".player"))[0].querySelectorAll(".score"))[0]
 					score.innerText = post.points || 0
 					
@@ -85,7 +85,7 @@
 						score.removeAttribute("flash")
 					}, 500)
 				}
-				if (post.words) {
+				if (post.words !== undefined) {
 					document.getElementById("card").setAttribute("ellipsis", false)
 					document.getElementById("word").innerText = post.words.join(" & ")
 					
@@ -95,9 +95,16 @@
 					}, 500)
 
 				}
-				if (post.ellipsis) {
+				if (post.ellipsis !== undefined) {
 					document.getElementById("card").setAttribute("ellipsis", true)
 					document.getElementById("word").innerText = ""
+				}
+
+			// opponents
+				if (post.opponents !== undefined) {
+					for (var o in post.opponents) {
+						receiveOpponent(post.opponents[o])
+					}
 				}
 
 			// parameters
@@ -111,5 +118,41 @@
 			// message
 				if (post.message) {
 					displayError(post.message)
+				}
+		}
+
+	/* receiveOpponent */
+		function receiveOpponent(opponent) {
+			// find opponent
+				var block = document.getElementById(opponent.id) || null
+
+			// add opponent
+				if (!block) {
+					var block = document.createElement("button")
+						block.id = opponent.id
+						block.className = "opponent"
+						block.setAttribute("color", opponent.color)
+
+					var score = document.createElement("div")
+						score.className = "score"
+						score.innerText = opponent.points || ""
+					block.appendChild(score)
+
+					var name = document.createElement("div")
+						name.className = "name"
+						name.innerText = opponent.name
+					block.appendChild(name)
+
+					document.getElementById("opponents").appendChild(block)
+				}
+
+			// remove opponent
+				else if (opponent.remove) {
+					block.remove()
+				}
+
+			// update opponent
+				else if (block.className == "opponent") {
+					Array.from(block.querySelectorAll(".score"))[0].innerText = opponent.points || ""
 				}
 		}
