@@ -8,8 +8,8 @@
 			// get values
 				var name = document.getElementById("createName").value || null
 
-			if (!name || name.length < 4 || name.length > 16) {
-				displayError("Enter a name between 4 and 16 characters.")
+			if (!name || !name.length || name.length > 10) {
+				displayError("Enter a name between 1 and 10 characters.")
 			}
 			else if (!isNumLet(name)) {
 				displayError("Your name can be letters and numbers only.")
