@@ -22,7 +22,7 @@
 				var content = ""
 
 				content += "<div id='card' " + (player.state.words[0] ? "" : " ellipsis='true'") + "' phase='" + String(request.game.state.phase) + "' round='" + String(request.game.state.round) + "'>"
-				content += 		"<button id='begin'>begin</button>"
+				content += 		"<button id='begin'>begin [" + request.game.id + "]</button>"
 				content += 		"<div id='word'>" + (player.state.words[0] ? player.state.words.join("<br>") : "") + "</div>"
 				content += 		"<button id='switch'" + (player.state.switching ? " active='true'": "") + "></button>"
 				content += 		"<a id='again' href='../../'>play again?</a>"
