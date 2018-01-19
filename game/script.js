@@ -160,12 +160,12 @@
 						block.setAttribute("color", opponent.color)
 						block.addEventListener("click", submitOpponent)
 
-					var score = document.createElement("div")
+					var score = document.createElement("span")
 						score.className = "score"
 						score.innerText = opponent.points || ""
 					block.appendChild(score)
 
-					var name = document.createElement("div")
+					var name = document.createElement("span")
 						name.className = "name"
 						name.innerText = opponent.name
 					block.appendChild(name)
