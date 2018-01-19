@@ -34,10 +34,10 @@
 			<script node> /* player */
 				var content = ""
 
-				content += "<div class='player' id='" + player.id + "' color='" + player.color + "'>"
-				content += 		"<div class='score'>" + (player.state.points || 0) + "</div>"
-				content +=		"<div class='name'>" + player.name + "</div>"
-				content += "</div>"
+				content += "<button class='player' id='" + player.id + "' color='" + player.color + "'>"
+				content += 		"<span class='score'>" + (player.state.points || 0) + "</span>"
+				content +=		"<span class='name'>" + player.name + "</span>"
+				content += "</button>"
 
 				content || ""
 			</script>node>
@@ -50,8 +50,8 @@
 					var opponent = request.game.players[opponents[o]]
 					if (opponent.connection || request.game.state.end) {
 						content += "<button class='opponent' id='" + opponent.id + "' color='" + opponent.color + "'" + (request.game.players[request.session.id].state.selecting == opponent.id ? " selected='true'" : "") + ">"
-						content += 		"<div class='score'" + (request.game.state.end ? " points='true'" : "") + ">" + (request.game.state.end ? opponent.state.points : "") + "</div>"
-						content += 		"<div class='name'>" + opponent.name + "</div>"
+						content += 		"<span class='score'" + (request.game.state.end ? " points='true'" : "") + ">" + (request.game.state.end ? opponent.state.points : "") + "</span>"
+						content += 		"<span class='name'>" + opponent.name + "</span>"
 						content += "</button>"
 					}
 				}
