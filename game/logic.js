@@ -28,7 +28,7 @@
 
 						// instructions
 							beginCountdown(request, callback, function() {
-								callback(players, {success: true, message: "find a player who shares a word with you!"})
+								callback(players, {success: true, message: "find a player with a matching word - but don't say your words!"})
 
 								// begin round
 									beginCountdown(request, callback, function() {
@@ -132,9 +132,9 @@
 												return ((p !== request.session.id) && (p !== request.post.opponent))
 											}) || []
 
-											callback([request.session.id   ], {success: true, message: "matched with " + request.game.players[request.post.opponent].name + "!",                                       ellipsis: true, points: request.game.players[request.session.id   ].state.points})
-											callback([request.post.opponent], {success: true, message: "matched with " + request.game.players[request.session.id   ].name + "!",                                       ellipsis: true, points: request.game.players[request.post.opponent].state.points})
-											callback(others,                  {success: true, message: request.game.players[request.session.id] + " matched with " + request.game.players[request.post.opponent].name, ellipsis: true})
+											callback([request.session.id   ], {success: true, message: "matched with " + request.game.players[request.post.opponent].name + "!",                                            ellipsis: true, points: request.game.players[request.session.id   ].state.points})
+											callback([request.post.opponent], {success: true, message: "matched with " + request.game.players[request.session.id   ].name + "!",                                            ellipsis: true, points: request.game.players[request.post.opponent].state.points})
+											callback(others,                  {success: true, message: request.game.players[request.session.id].name + " matched with " + request.game.players[request.post.opponent].name, ellipsis: true})
 
 										// instructions
 											beginCountdown(request, callback, function() {
@@ -213,7 +213,7 @@
 										if (request.game.state.round < 3) {
 											// instructions
 												beginCountdown(request, callback, function() {
-													callback(players, {success: true, message: "find a player who shares a word with you!"})
+													callback(players, {success: true, message: "find a player with a matching word!"})
 													
 													// begin round
 														beginCountdown(request, callback, function() {
