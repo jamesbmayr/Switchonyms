@@ -61,7 +61,7 @@
 					break
 					
 					case "google fonts":
-						return '<link href="https://fonts.googleapis.com/css?family=Julius+Sans+One" rel="stylesheet">'
+						return '<link href="https://fonts.googleapis.com/css?family=Reem+Kufi" rel="stylesheet">'
 					break
 
 					case "meta":
