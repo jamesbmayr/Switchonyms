@@ -62,12 +62,6 @@
 					if (name.length > 10) {
 						name = name.slice(0,10)
 					}
-					else if (!name.length) {
-						name = main.generateRandom(null,5)
-					}
-					else if (opponents.filter(function (o) { return request.game.players[opponents[o]].name == name }).length) {
-						name = name + " 2"
-					}
 
 				// create player
 					var player = {id: request.session.id}
