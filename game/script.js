@@ -1,6 +1,8 @@
 /*** onload ***/
 	var socket = null
-	createSocket()
+	if ([0,1,2,3].includes(Number(document.getElementById("card").getAttribute("round")))) {
+		createSocket()
+	}
 
 /*** submits ***/
 	/* submitBegin */
