@@ -1,35 +1,41 @@
 /*** onload ***/
 	var socket = null
-	// createSocket()
+	createSocket()
 
 /*** submits ***/
 	/* submitBegin */
 		document.getElementById("begin").addEventListener("click", submitBegin)
 		function submitBegin(event) {
-			if (event.target.className == "hidden") {
+			if (event.target.id !== "begin") {
+				//
+			}
+			else if (Number(document.getElementById("card").getAttribute("round"))) {
 				displayError("Game already started...")
 			}
 			else {
 				var post = {
 					action: "submitBegin"
 				}
-				socket.send(post)
+				socket.send(JSON.stringify(post))
 			}
 		}
 
 	/* submitSwitch */
 		document.getElementById("switch").addEventListener("click", submitSwitch)
 		function submitSwitch(event) {
-			if (event.target.className == "hidden") {
+			if (event.target.id !== "switch") {
+				//
+			}
+			else if (document.getElementById("card").getAttribute("ellipse")) {
 				displayError("Unable to switch at this time...")
 			}
 			else {
-				if (event.target.className == "active") {
-					event.target.className == ""
+				if (event.target.getAttribute("active")) {
+					event.target.removeAttribute("active")
 					var active = false
 				}
 				else {
-					event.target.className == "active"
+					event.target.setAttribute("active", true)
 					var active = true
 				}
 
@@ -37,7 +43,7 @@
 					action: "submitSwitch",
 					active: active
 				}
-				socket.send(post)
+				socket.send(JSON.stringify(post))
 			}
 		}
 
@@ -45,30 +51,36 @@
 		var buttons = Array.from(document.querySelectorAll(".opponent"))
 			buttons.forEach(function (b) { b.addEventListener("click", submitOpponent) })
 		function submitOpponent(event) {
-			var opponent = event.target.id
-
-			if (document.getElementById("word").className == "hidden") {
-				displayError("Unable to switch at this time...")
+			if (event.target.className !== "opponent") {
+				//
 			}
-			else if (!isNumLet(opponent)) {
+			else if (document.getElementById("card").getAttribute("ellipse")) {
+				displayError("Unable to select opponent at this time...")
+			}
+			else if (!isNumLet(event.target.id)) {
 				displayError("Invalid opponent id...")
 			}
 			else {
-				if (event.target.className == "active") {
-					event.target.className == ""
-					var active = false
+				if (event.target.getAttribute("selected")) {
+					event.target.removeAttribute("selected")
+					var selecting = false
 				}
 				else {
-					event.target.className == "active"
-					var active = true
+					var opponents = Array.from(document.querySelectorAll(".opponent"))
+					for (var o in opponents) {
+						opponents[o].removeAttribute("selected")
+					}
+					event.target.setAttribute("selected", true)
+
+					var selecting = true
 				}
 
 				var post = {
 					action: "submitOpponent",
-					opponent: opponent,
-					active: active
+					opponent: event.target.id,
+					selecting: selecting
 				}
-				socket.send(post)
+				socket.send(JSON.stringify(post))
 			}
 		}
 
@@ -83,21 +95,23 @@
 					score.setAttribute("flash", true)
 					setTimeout(function() {
 						score.removeAttribute("flash")
-					}, 500)
+					}, 1000)
 				}
 				if (post.words !== undefined) {
-					document.getElementById("card").setAttribute("ellipsis", false)
-					document.getElementById("word").innerText = post.words.join(" & ")
+					document.getElementById("card").removeAttribute("ellipsis")
+					document.getElementById("word").innerHTML = post.words.join("<br>")
+					document.getElementById("switch").removeAttribute("active")
 					
 					document.getElementById("word").setAttribute("flash", true)
 					setTimeout(function() {
 						document.getElementById("word").removeAttribute("flash")
-					}, 500)
+					}, 1000)
 
 				}
 				if (post.ellipsis !== undefined) {
 					document.getElementById("card").setAttribute("ellipsis", true)
-					document.getElementById("word").innerText = ""
+					document.getElementById("switch").removeAttribute("active")
+					document.getElementById("word").innerHTML = ""
 				}
 
 			// opponents
@@ -110,9 +124,19 @@
 			// parameters
 				if (post.phase !== undefined) {
 					document.getElementById("card").setAttribute("phase", Number(post.phase))
+
+					var opponents = Array.from(document.querySelectorAll(".opponent"))
+					for (var o in opponents) {
+						opponents[o].removeAttribute("selected")
+					}
 				}
 				if (post.round !== undefined) {
 					document.getElementById("card").setAttribute("round", Number(post.round))
+
+					var opponents = Array.from(document.querySelectorAll(".opponent"))
+					for (var o in opponents) {
+						opponents[o].removeAttribute("selected")
+					}
 				}
 
 			// message
@@ -132,6 +156,7 @@
 						block.id = opponent.id
 						block.className = "opponent"
 						block.setAttribute("color", opponent.color)
+						block.addEventListener("click", submitOpponent)
 
 					var score = document.createElement("div")
 						score.className = "score"
@@ -153,6 +178,14 @@
 
 			// update opponent
 				else if (block.className == "opponent") {
-					Array.from(block.querySelectorAll(".score"))[0].innerText = opponent.points || ""
+					var score = Array.from(block.querySelectorAll(".score"))[0]
+					if (opponent.points) {
+						score.setAttribute("points", true)
+						score.innerText = opponent.points || 0
+					}
+					else {
+						score.removeAttribute("points")
+						score.innerText = ""
+					}
 				}
 		}

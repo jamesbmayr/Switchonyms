@@ -3,8 +3,8 @@
 
 /*** actions ***/
 	/* submitFeedback */
-		document.getElementById("feedback-submit").addEventListener("click", submitFeedback)
-		document.getElementById("feedback-email").addEventListener("keyup", function(event) { if (event.which == 13) { submitFeedback() } })
+		//document.getElementById("feedback-submit").addEventListener("click", submitFeedback)
+		//document.getElementById("feedback-email").addEventListener("keyup", function(event) { if (event.which == 13) { submitFeedback() } })
 		function submitFeedback() {
 			var text  = document.getElementById("feedback-text").value  || false
 			var email = document.getElementById("feedback-email").value || false

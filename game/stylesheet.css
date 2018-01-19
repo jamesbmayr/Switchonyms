@@ -1,26 +1,4 @@
 /*** page ***/
-	body {
-		position: absolute;
-		top: 0px;
-		left: 0px;
-		height: 100vh;
-		width: 100vw;
-		margin: 0px;
-		padding: 0px;
-		background-color: #dddddd;
-		color: #333333;
-		font-family: monospace;
-		font-size: 50px;
-		box-shadow: 0px 0px 50px #333333 inset;
-		overflow: hidden;
-	}
-
-	/* effects */
-		.hidden {
-			opacity: 0;
-			pointer-events: none;
-		}
-
 	/* container */
 		#container {
 			position: absolute;
@@ -28,209 +6,254 @@
 			left: 50%;
 			transform: translateX(-50%) translateY(-50%);
 			text-align: center;
-			max-height: 90vh;
-			max-width: 85vw;
+			height: 85vh;
+			width: 85vw;
+			border: 4px solid #111111;
 		}
 
 /*** card ***/
-	/* ellipsis */
-		#ellipsis {
-			width: 100%;
-			text-align: center;
-			color: #777777;
-			font-size: 50px;
+	#card {
+		position: absolute;
+		top: 0%;
+		left: 0%;
+		width: 100%;
+		height: 40%;
+		font-size: 100%;
+		color: #111111;
+		text-overflow: ellipsis;
+		text-align: center;
+	}
+
+	/* begin */
+		#begin {
 			position: absolute;
-			top: 0px;
-			left: 0px;
-			z-index: -1;
-			user-select: none;
-			-webkit-user-select: none;
-			-moz-user-select: none;
-			-ms-user-select: none;
-			-o-user-select: none;
+			top: 50%;
+			left: 50%;
+			transform: translateX(-50%) translateY(-50%);
+			font-size: 200%;
+			padding: 10px;
+		}
+
+		#card:not([round="0"]) #begin {
+			display: none;
+			pointer-events: none;
+		}
+
+	/* again */
+		#again {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translateX(-50%) translateY(-50%);
+			font-size: 150%;
+			padding: 10px;
+			background-color: #111111;
+			color: #dddddd;
+			text-transform: uppercase;
+		}
+
+		#again:hover, #again:focus {
+			box-shadow: 0px 0px 25px #111111;
+		}
+
+		#card:not([round="4"]) #again {
+			display: none;
+			pointer-events: none;
 		}
 
 	/* word */
 		#word {
-			display: block;
-			font-size: 30px;
-			padding: 20px 4px 20px 4px;
-			width: calc(100% - 12px);
-			color: #dddddd;
-			background-color: #333333;
-			border: 2px solid #333333;
-			border-radius: 10px;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translateX(-50%) translateY(-50%);
+			padding: 5px;
+			width: calc(100% - 10px);
+			max-height: calc(100% - 10px);
+			font-size: 150%;
+			text-transform: uppercase;
 			user-select: none;
 			-webkit-user-select: none;
 			-moz-user-select: none;
 			-ms-user-select: none;
 			-o-user-select: none;
-			overflow: hidden;
-			text-overflow: ellipsis;
+			overflow-wrap: break-word;
+			-webkit-hyphens: auto;
+			-moz-hyphens: auto;
+			hyphens: auto;
 		}
 
-	/* switch */
+		#word[flash] {
+			transition: 1s;
+			text-shadow: 0px 0px 25px #111111;
+		}
+
+		#card[ellipsis]:not([round="0"]) #word:after {
+			content: "...";
+		}
+
+	/* switch */	
 		#switch {
 			position: absolute;
-			top: -25px;
-			right: -25px;
-			height: 65px;
-			width: 65px;
-			font-size: 30px;
+			top: -3vh;
+			right: -3vh;
+			width: 10vh;
+			height: 10vh;
+			padding: 5%;
+			border-width: 4px;
 			background-color: #dddddd;
-			color: #333333;
-			border-radius: 100%;
-			line-height: 1;
-			border: 2px solid #333333;
-			cursor: pointer;
-			outline: none;
-			user-select: none;
-			-webkit-user-select: none;
-			-moz-user-select: none;
-			-ms-user-select: none;
-			-o-user-select: none;
-			opacity: 0.8;
-		}
-
-		#switch:hover {
-			background-color: #333333;
-			color: #dddddd;
-			border-color: #333333;
-			opacity: 1;
-		}
-
-	/* requests */
-		#requests {
-			width: 100%;
-			display: flex;
-			flex-flow: row wrap;
+			background-image: url(./logo.png);
+			background-repeat: no-repeat;
+			background-position: center;
+			background-size: contain;
 			text-align: center;
-			margin-top: 20px;
-		}
-
-		.request {
-			display: inline-block;
-			width: calc(50% - 4px);
-			margin: 2px;
-			background-color: #dddddd;
-			color: #333333;
-			border: 2px solid #333333;
-			border-radius: 10px;
-			font-family: monospace;
-			font-size: 20px;
-			padding: 5px 10px 10px 10px;
-			outline: none;
 			user-select: none;
-			-webkit-user-select: none;
-			-moz-user-select: none;
-			-ms-user-select: none;
-			-o-user-select: none;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			font-family: monospace;
 			cursor: pointer;
 		}
 
-		.request span {
-			font-size: 30px;
-			line-height: 1;
-			margin-right: 5px;
+		#switch[active] {
+			box-shadow: 0px 0px 25px #111111 inset;
 		}
 
-		.request:hover {
-			color: #dddddd;
-			background-color: #333333;
+		#card[ellipsis] #switch, #card[phase="0"] #switch {
+			display: none;
+			pointer-events: none;
 		}
 
-/*** players ***/
-	#players {
-		display: flex;
-		flex-flow: row wrap;
-		text-align: center;
+/*** player ***/
+	.player {
+		position: absolute;
+		top: 40%;
+		left: 0%;
+		width: 100%;
+		height: 10%;
+		font-size: 100%;
+		color: #dddddd;
+		user-select: none;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		-o-user-select: none;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		z-index: 2;
 	}
 
-	/* player */
-		.player {
-			display: block;
-			font-size: 30px;
-			text-align: left;
-			padding: 5px;
-			white-space: nowrap;
-			background-color: #dddddd;
-			color: #333333;
-			border: 2px solid #333333;
-			border-radius: 10px;
-			order: 1;
-			width: 100%;
-			margin: 20px 2px 5px 2px;
-			outline: none;
-			user-select: none;
-			-webkit-user-select: none;
-			-moz-user-select: none;
-			-ms-user-select: none;
-			-o-user-select: none;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			font-family: monospace;
-		}
+	.player .name {
+		float: left;
+		text-transform: uppercase;
+		padding: 10px;
+		width: calc(70% - 20px);
+		height: calc(100% - 20px);
+	}
 
-		.player .name {
-			display: inline-block;
-		}
+	.player .score {
+		float: left;
+		background-color: #111111;
+		color: #dddddd;
+		padding: 10px;
+		width: calc(30% - 20px);
+		height: calc(100% - 20px);
+	}
 
-		.player .score {
-			display: inline-block;
-			background-color: #333333;
-			color: #dddddd;
-			border-radius: 5px;
-			padding: 5px;
-		}
+	.player .score[flash] {
+		transition: 1s;
+		box-shadow: 0px 0px 25px #dddddd inset;
+	}
 
-	/* opponents */
-		.opponent {
-			margin: 2px;
-			display: inline-block;
-			font-size: 20px;
-			text-align: left;
-			padding: 5px;
-			white-space: nowrap;
-			order: 2;
-			width: calc(50% - 4px);
-			color: #333333;
-			border: 2px solid #333333;
-			border-radius: 10px;
-			background-color: #dddddd;
-			cursor: pointer;
-			outline: none;
-			user-select: none;
-			-webkit-user-select: none;
-			-moz-user-select: none;
-			-ms-user-select: none;
-			-o-user-select: none;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			font-family: monospace;
-		}
+/*** opponents ***/
+	#opponents {
+		position: absolute;
+		top: 50%;
+		left: 0%;
+		width: 100%;
+		height: 50%;
+		z-index: 3;
+	}
 
-		.opponent:hover{
-			background-color: #333333;
-			border-color: #333333;
-			color: #dddddd;
-		}
+	.opponent {
+		float: left;
+		margin: 0px;
+		width: 50%;
+		height: 20%;
+		font-size: 80%;
+		border: 0px;
+		text-align: center;
+		cursor: pointer;
+		outline: none;
+		user-select: none;
+		-webkit-user-select: none;
+		-moz-user-select: none;
+		-ms-user-select: none;
+		-o-user-select: none;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		line-height: 1.25;
+	}
 
-		.opponent .name {
-			display: inline-block;
-		}
+	.opponent .name {
+		width: calc(100% - 30px);
+		height: calc(100% - 30px);
+		padding: 5px;
+		margin: 10px;
+		pointer-events: none;
+	}
 
-		.opponent .score {
-			background-color: #333333;
-			color: #dddddd;
-			padding: 5px;
-			border-radius: 5px;
-			display: inline-block;
-		}
+	.opponent .score {
+		width: calc(100% - 30px);
+		height: calc(100% - 30px);
+		padding: 5px;
+		margin: 10px;
+		z-index: 2;
+		pointer-events: none;
+	}
 
-		.opponent:hover .score {
-			background-color: #dddddd;
-			color: #333333;
-		}
+	.opponent .score:not([points]) {
+		display: none;
+	}
+
+	#card[phase="0"] + .player + #opponents .opponent[selected] {
+		box-shadow: 0px 0px 25px #111111 inset;
+	}
+
+/*** colors ***/
+	[color="red"], [color="red"] div {
+		background-color: #ff6b69;	
+	}
+
+	[color="orange"], [color="orange"] div {
+		background-color: #d89258;	
+	}
+
+	[color="yellow"], [color="yellow"] div {
+		background-color: #aba14d;	
+	}
+
+	[color="green"], [color="green"] div {
+		background-color: #67b873;	
+	}
+
+	[color="blue"], [color="blue"] div {
+		background-color: #7493e4;	
+	}
+
+	[color="purple"], [color="purple"] div {
+		background-color: #9367b5;	
+	}
+
+	[color="magenta"], [color="magenta"] div {
+		background-color: #bf466f;	
+	}
+
+	[color="cyan"], [color="cyan"] div {
+		background-color: #2b838e;	
+	}
+
+	[color="brown"], [color="brown"] div {
+		background-color: #61483f;	
+	}
+
+	[color="gray"], [color="gray"] div {
+		background-color: #70767b;	
+	}
+

@@ -1,6 +1,5 @@
 /*** modules ***/
 	var main = require("../main/logic")
-	var game = require("../game/logic")
 	module.exports = {}
 
 /*** creates ***/
@@ -25,9 +24,9 @@
 						}
 						request.game.players = []
 						request.game.words = {
-							nouns:      [],
-							verbs:      [],
-							adjectives: []
+							noun:      [],
+							verb:      [],
+							adjective: []
 						}
 
 					// create player

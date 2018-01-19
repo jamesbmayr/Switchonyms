@@ -5,8 +5,8 @@
 		<script node> getAsset("meta") </script>node>
 		<script node> getAsset("google fonts") </script>node>
 		<link rel="shortcut icon" type="image/png" href="logo.png"/>
-		<link rel="stylesheet" type="text/css" href="./home/stylesheet.css"/>
-		<script type="text/javascript" src="./home/script.js"></script>
+		<link rel="stylesheet" type="text/css" href="./game/stylesheet.css"/>
+		<script type="text/javascript" src="./game/script.js"></script>
 		<script node>
 			var player = request.game.players[request.session.id]
 			var opponents = Object.keys(request.game.players).filter(function (p) {
@@ -21,10 +21,10 @@
 			<script node> /* card */
 				var content = ""
 
-				content += "<div id='card' ellipsis='" + (player.state.words[0] ? false : true) + "' phase='" + String(request.game.state.phase) + "' round='" + String(request.game.state.round) + "'>"
+				content += "<div id='card' " + (player.state.words[0] ? "" : " ellipsis='true'") + "' phase='" + String(request.game.state.phase) + "' round='" + String(request.game.state.round) + "'>"
 				content += 		"<button id='begin'>begin</button>"
-				content += 		"<div id='word'>" + (player.state.words[0] ? player.state.words.join("&") : "") + "</div>"
-				content += 		"<button id='switch'>&harr;</button>"
+				content += 		"<div id='word'>" + (player.state.words[0] ? player.state.words.join("<br>") : "") + "</div>"
+				content += 		"<button id='switch'" + (player.state.switching ? " active='true'": "") + "></button>"
 				content += 		"<a id='again' href='../../'>play again?</a>"
 				content += "</div>"
 
@@ -48,8 +48,8 @@
 				content += "<div id='opponents'>"
 				for (var o in opponents) {
 					var opponent = request.game.players[opponents[o]]
-					content += "<button class='opponent' id='" + opponent.id + "' color='" + opponent.color + "'>"
-					content += 		"<div class='score'>" + (request.game.state.end ? opponent.state.points : "") + "</div>"
+					content += "<button class='opponent' id='" + opponent.id + "' color='" + opponent.color + "'" + (request.game.players[request.session.id].state.selecting == opponent.id ? " selected='true'" : "") + ">"
+					content += 		"<div class='score'" + (request.game.state.end ? " points='true'" : "") + ">" + (request.game.state.end ? opponent.state.points : "") + "</div>"
 					content += 		"<div class='name'>" + opponent.name + "</div>"
 					content += "</button>"
 				}

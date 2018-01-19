@@ -1,28 +1,19 @@
 /*** page ***/
 	/* container */
-		#background {
-			background-color: #dddddd;
-			background-position: center;
-			height: 100vh;
-			width: 100vw;
-			overflow: hidden;
-			filter: blur(3px);
-			box-shadow: 0px 0px 20px #333333 inset;
-		}
-
 		#container {
 			position: absolute;
-			top: calc(50%);
-			left: calc(50%);
-			height: 292px;
-			width: 600px;
+			height: auto;
+			width: auto;
+			top: 50%;
+			left: 50%;
+			padding: 5%;
 			transform: translateX(-50%) translateY(-50%);
 			text-align: center;
 			z-index: 2;
-			border-radius: 10px;
+			border-radius: 0px;
 			background-color: #dddddd;
-			box-shadow: 0px 0px 20px #333333;
-			border: 4px solid #333333;
+			box-shadow: 0px 0px 25px #111111;
+			border: 4px solid #111111;
 			user-select: none;
 			-webkit-user-select: none;
 			-moz-user-select: none;
@@ -33,98 +24,68 @@
 /*** form ***/
 	/* title */
 		#title {
-			margin: 0px;
-			padding: 10px;
-			width: calc(100% - 20px);
-			color: #333333;
-			text-align: center;
-			font-size: 80px;
-			height: 80px;
-			line-height: 1;
-			cursor: default;
 			float: left;
+			width: 100%;
+			text-align: center;
+			line-height: 1;
+			font-size: 150%;
+			text-transform: uppercase;
+			cursor: default;
 		}
 
 	/* links */
 		#links {
-			font-weight: bold;
-			width: calc(100% - 20px);
-			margin: 0px;
-			padding: 0px 10px 20px 10px;
+			float: left;
+			width: 90%;
+			margin: 5% 5% 10% 5%;
 			text-align: center;
-			font-size: 30px;
-			color: #333333;
 			line-height: 1;
-			float: left;
-		}
-
-		#links a, #links a:visited {
-			color: #333333;
-		}
-
-		#links a:hover, #links a:focus {
-			text-shadow: 0px 0px 20px #000000;
-		}
-
-	/* form */
-		#form {
-			text-align: center;
-			width: 580px;
-			height: 122px;
-			float: left;
-			padding: 10px;
+			font-size: 75%;
+			text-transform: uppercase;
 		}
 
 	/* inputs */
-		#createName, #gameCode {
-			height: 40px;
-			padding: 5px;
-			text-align: center;
-			vertical-align: bottom;
-			background-color: #ffffff;
-			border: 3px solid #333333;
-			color: #333333;
-			font-weight: normal;
-		}
-
 		#createName {
-			width: 564px;
-			border-radius: 5px;
 			float: left;
-			margin: 0px 0px 10px 0px;
+			width: calc(100% - 16px);
+			padding: 4px;
+			text-align: center;
+			line-height: 1;
+			font-size: 100%;
 		}
 
 		#gameCode {
 			float: left;
-			border-radius: 5px 0px 0px 5px;
-			width: 214px;
+			width: calc(60% - 16px);
+			padding: 4px;
+			text-align: center;
+			line-height: 1;
+			font-size: 100%;
 		}
 
-		#createName:focus, #gameCode:focus {
-			box-shadow: 0px 0px 20px #333333;
+		@-moz-document url-prefix() {
+			#createName, #gameCode {
+				padding: 9px 4px 9px 4px;
+			}
 		}
 
 	/* buttons */
-		#createGame, #joinGame {
-			float: left;
-			border: 4px solid #333333;
-			color: #ffffff;
-			height: 56px;
-			width: 170px;
-			background-color: #333333;
-		}
-
-		#createGame:hover, #joinGame:hover, #createGame:focus, #joinGame:focus {
-			box-shadow: 0px 0px 25px #333333;
-		}
-
 		#createGame {
-			border-radius: 5px;
-			margin: 0px 10px 0px 0px;
+			float: left;
+			display: block;
+			width: calc(100% - 4px);
+			text-align: center;
+			line-height: 1;
+			font-size: 100%;
+			padding: 9px;
+			margin: 5% 0% 5% 0%;
 		}
 
 		#joinGame {
-			border-radius: 0px 5px 5px 0px;
-			margin-left: 0px;
+			float: left;
+			width: calc(40% - 4px);
+			text-align: center;
+			line-height: 1;
+			font-size: 100%;
+			padding: 9px;
 		}
-

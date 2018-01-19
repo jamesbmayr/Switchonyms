@@ -32,13 +32,20 @@
 
 /*** displays ***/
 	/* displayError */
+		var error = document.getElementById("error")
+		var errorFadein = null
+		var errorFadeout = null
+
 		function displayError(message) {
 			var error = document.getElementById("error")
 				error.textContent = message || "unknown error"
 				error.className = ""
 				error.style.opacity = 0
 			
-			var errorFadein = setInterval(function() { // fade in
+			if (typeof errorFadein  !== "undefined") { clearInterval(errorFadein)  }
+			if (typeof errorFadeout !== "undefined") { clearInterval(errorFadeout) }
+
+			errorFadein = setInterval(function() { // fade in
 				error.className = ""
 				var opacity = Number(error.style.opacity) * 100
 
@@ -47,15 +54,18 @@
 				}
 				else {
 					clearInterval(errorFadein)
+					if (typeof errorFadeout !== "undefined") { clearInterval(errorFadeout) }
 					
-					var errorFadeout = setInterval(function() { // fade out
+					errorFadeout = setInterval(function() { // fade out
 						var opacity = Number(error.style.opacity) * 100
 
-						if (opacity > 0) {
+						if (opacity > 0.01) {
 							error.style.opacity = Math.floor(opacity - ((101 - opacity) / 10) ) / 100
 						}
 						else {
 							clearInterval(errorFadeout)
+							if (typeof errorFadein !== "undefined") { clearInterval(errorFadein) }
+
 							error.className = "hidden"
 							error.style.opacity = 0
 						}
@@ -176,11 +186,8 @@
 				socket.onmessage = function(message) {
 					try {
 						var post = JSON.parse(message.data)
-						if (post && (typeof post == "object") && post.action) {
+						if (post && (typeof post == "object")) {
 							receivePost(post)
-						}
-						else {
-							console.log(error)
 						}
 					}
 					catch (error) {

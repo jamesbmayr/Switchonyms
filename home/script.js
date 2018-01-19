@@ -1,5 +1,5 @@
 /*** onload ***/
-	buildWords(20, true)
+	buildWords(30, true)
 
 /*** actions ***/
 	/* createGame */
@@ -72,3 +72,4 @@
 					})
 			}
 		}
+		

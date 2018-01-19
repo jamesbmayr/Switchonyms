@@ -5,8 +5,8 @@
 		<script node> getAsset("meta") </script>node>
 		<script node> getAsset("google fonts") </script>node>
 		<link rel="shortcut icon" type="image/png" href="logo.png"/>
-		<link rel="stylesheet" type="text/css" href="./home/stylesheet.css"/>
-		<script type="text/javascript" src="./home/script.js"></script>
+		<link rel="stylesheet" type="text/css" href="./about/stylesheet.css"/>
+		<script type="text/javascript" src="./about/script.js"></script>
 		<script node>
 			var nouns = []
 			while (nouns.length < 10) {
@@ -30,41 +30,43 @@
 		<div id="wordzone"></div>
 		<div id="error" class="hidden"></div>
 		<div id="container">
-			<div id="title">
-				<div id="logotype"></div>
-			</div>
-			<div id="about">
-				<div class="header">What is this?</div>
-				<div id="overview" class="section">
+			<div id="container-inner">
+				<a id="title" class="section" href="../../"><div id="logotype"></div></a>
+				<div id="about" class="section">
+					<div class="header">About</div>
 					<div class="content">
 						Switchonyms is a chaotic party game of words and guesses for 4+ people.
 					</div>
 				</div>
 				<div id="rules" class="section">
-					<div class="header">How do I play?</div><br>
+					<div class="header">Launch</div>
 					<div class="content">
 						Every game has a unique 4-character id. Just go to the <a href="./" target="_blank">homepage</a> to start a new one - or join your friend's!
 						<br><br>
 						The game is divided into 3 rounds: <span class="redtext">nouns</span>, <span class="greentext">verbs</span>, and <span class="bluetext">adjectives</span>. Each round has two phases: <span class="orangetext">matching</span> and <span class="purpletext">guessing</span>.
-						<br><br>
+					</div>
+				</div>
+				<div id="rules" class="section">
+					<div class="header">Gameplay</div>
+					<div class="content">
 						In the <span class="orangetext">matching</span> phase, players race to match up with an opponent who has the same secret word they do. Everyone has 2 words to try - but finding a match is harder than it sounds!
 						<br><br>
 						In the <span class="purpletext">guessing</span> phase, 2 players will each have a secret word. Get points by guessing a secret word based on the players' clues - but lose points for every second that nobody guesses your word!
 					</div>
 				</div>
+				<div id="feedback" class="section">
+					<div class="header">Feedback</div>
+					<div class="content">
+						<textarea id="feedback-text" rows="4" placeholder="your feedback" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
+						<input type="email" id="feedback-email" placeholder="your email" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/><button id="feedback-submit" value="submit">&#8595;</button>
+					</div>
+				</div>
 				<div id="code" class="section">
-					<div class="header">How does it work?</div><br>
+					<div class="header">Code</div>
 					<div class="content">
 						The app is powered by <span class="greentext">nodeJS</span> and <span class="bluetext"><a href="https://www.npmjs.com/package/websocket" target="_blank">websockets</a></span>, written in 100% raw <span class="redtext">javascript</span>. 
 						<br><br>
 						See the latest updates on <a href="https://www.github.com/jamesbmayr/switchonyms" target="_blank">GitHub</a>.
-					</div>
-				</div>
-				<div id="feedback" class="section">
-					<div class="header">Where do I submit feedback?</div><br>
-					<div class="content">
-						<textarea id="feedback-text" rows="4" placeholder="share your feedback here" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"></textarea>
-						<input type="email" id="feedback-email" placeholder="your email" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/><button id="feedback-submit" value="submit">&#8595;</button>
 					</div>
 				</div>
 			</div>

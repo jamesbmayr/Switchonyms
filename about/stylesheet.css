@@ -1,0 +1,121 @@
+/*** page ***/
+	/* container */
+		#container {
+			margin: 0px;
+			padding: 10px;
+			border: 0px;
+			width: calc(100vw - 20px);
+			height: calc(100vh - 20px);
+			text-align: left;
+			overflow-x: hidden;
+			overflow-y: scroll;
+		}
+
+		#container-inner {
+			width: 100%;
+			max-width: 800px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+
+	/* title */
+		#title {
+			text-align: center;
+			width: calc(100% - 16px);
+			height: 200px;
+			padding: 4px;
+			margin-top: 5%;
+			background-color: #dddddd;
+			display: block;
+		}
+
+		#logotype {
+			display: inline-block;
+			background-color: #dddddd;
+			background-image: url(./banner.png);
+			background-repeat: no-repeat;
+			background-position: center;
+			background-size: cover;
+			text-align: center;
+			user-select: none;
+			height: 200px;
+			width: 200px;
+			cursor: pointer;
+			margin: 0px;
+		}
+
+	/* sections */
+		.section {
+			border: 4px solid #111111;
+			background-color: #111111;
+			margin: 0% 0% 10% 0%;
+			box-shadow: 0px 0px 25px #111111;
+			font-weight: normal;
+			cursor: default;
+			color: #111111;
+			line-height: 1.25;
+		}
+
+		.header {
+			font-size: 150%;
+			width: 100%;
+			background-color: #111111;
+			color: #dddddd;
+			cursor: default;
+			text-align: center;
+			text-transform: uppercase;
+		}
+
+		.content {
+			padding: 5%;
+			font-size: 100%;
+			color: #111111;
+			background-color: #dddddd;
+			cursor: default;
+			text-align: center;
+		}
+
+	/* feedback */
+		#feedback-text {
+			padding: 10px;
+			max-width: calc(100% - 28px);
+			min-width: calc(100% - 28px);
+			margin-bottom: 2%;
+		}
+
+		#feedback-email {
+			width: calc(100% - 28px - 100px);
+			padding: 10px;
+		}
+
+		#feedback-submit {
+			vertical-align: bottom;
+			padding: 10px;
+			width: 100px;
+		}
+
+	/* colors */
+		.redtext {
+			text-transform: uppercase;
+			color: #ff6b69;
+		}
+
+		.orangetext {
+			text-transform: uppercase;
+			color: #d89258;
+		}
+
+		.greentext {
+			text-transform: uppercase;
+			color: #67b873;
+		}
+
+		.bluetext {
+			text-transform: uppercase;
+			color: #7493e4;
+		}
+
+		.purpletext {
+			text-transform: uppercase;
+			color: #9367b5;
+		}

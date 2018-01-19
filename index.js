@@ -356,13 +356,16 @@
 					request.game = db[request.path[2]] || false
 					
 					// on connect
-						game.addPlayer(function (recipients, data) {
+						game.addPlayer(request, function (recipients, data) {
 							if (!data.success) {
 								_400(data.message || "unable to connect")
 							}
 							else {
 								for (var r in recipients) {
-									request.game.players[recipients[r]].connection.sendUTF(JSON.stringify(data))
+									try {
+										request.game.players[recipients[r]].connection.sendUTF(JSON.stringify(data))
+									}
+									catch (error) { main.logError(error) }
 								}
 							}
 						})
@@ -375,7 +378,10 @@
 								}
 								else {
 									for (var r in recipients) {
-										request.game.players[recipients[r]].connection.sendUTF(JSON.stringify(data))
+										try {
+											request.game.players[recipients[r]].connection.sendUTF(JSON.stringify(data))
+										}
+										catch (error) { main.logError(error) }
 									}
 								}
 							})
@@ -389,18 +395,21 @@
 								}
 								catch (error) {
 									request.post = null
+									main.logError(error)
 								}
 
-							if (!request.post || !request.post.action) {
-								_400("no action specified")
-							}
-							else {
+							if (request.post && request.post.action) {
+								main.logStatus(request.session.id + " @ " + request.ip + "\n[WEBSOCKET] " + request.path.join("/") + "\n" + message.utf8Data)
+								
 								switch (request.post.action) {
 									case "submitBegin":
 										try {
 											game.submitBegin(request, function (recipients, data) {
 												for (var r in recipients) {
-													request.game.players[recipients[r]].connection.sendUTF(JSON.stringify(data))
+													try {
+														request.game.players[recipients[r]].connection.sendUTF(JSON.stringify(data))
+													}
+													catch (error) { main.logError(error) }
 												}
 											})
 										}
@@ -411,7 +420,10 @@
 										try {
 											game.submitSwitch(request, function (recipients, data) {
 												for (var r in recipients) {
-													request.game.players[recipients[r]].connection.sendUTF(JSON.stringify(data))
+													try {
+														request.game.players[recipients[r]].connection.sendUTF(JSON.stringify(data))
+													}
+													catch (error) { main.logError(error) }
 												}
 											})
 										}
@@ -422,7 +434,10 @@
 										try {
 											game.submitOpponent(request, function (recipients, data) {
 												for (var r in recipients) {
-													request.game.players[recipients[r]].connection.sendUTF(JSON.stringify(data))
+													try {
+														request.game.players[recipients[r]].connection.sendUTF(JSON.stringify(data))
+													}
+													catch (error) { main.logError(error) }
 												}
 											})
 										}
@@ -443,6 +458,6 @@
 		/* _400 */
 			function _400(data) {
 				main.logError(data)
-				request.connection.sendUTF(data || "unknown websocket error")
+				request.connection.sendUTF(JSON.stringify({success: false, message: (data || "unknown websocket error")}))
 			}
 	}
