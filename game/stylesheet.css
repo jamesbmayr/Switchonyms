@@ -90,6 +90,19 @@
 
 		#card[ellipsis]:not([round="0"]) #word:after {
 			content: "...";
+			color: #111111;
+		}
+
+		#card[round="1"] #word {
+			color: #ff6b69;
+		}
+
+		#card[round="2"] #word {
+			color: #67b873;
+		}
+
+		#card[round="3"] #word {
+			color: #7493e4;
 		}
 
 	/* switch */	
