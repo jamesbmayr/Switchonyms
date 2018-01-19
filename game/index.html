@@ -48,10 +48,12 @@
 				content += "<div id='opponents'>"
 				for (var o in opponents) {
 					var opponent = request.game.players[opponents[o]]
-					content += "<button class='opponent' id='" + opponent.id + "' color='" + opponent.color + "'" + (request.game.players[request.session.id].state.selecting == opponent.id ? " selected='true'" : "") + ">"
-					content += 		"<div class='score'" + (request.game.state.end ? " points='true'" : "") + ">" + (request.game.state.end ? opponent.state.points : "") + "</div>"
-					content += 		"<div class='name'>" + opponent.name + "</div>"
-					content += "</button>"
+					if (opponent.connection || request.game.state.end) {
+						content += "<button class='opponent' id='" + opponent.id + "' color='" + opponent.color + "'" + (request.game.players[request.session.id].state.selecting == opponent.id ? " selected='true'" : "") + ">"
+						content += 		"<div class='score'" + (request.game.state.end ? " points='true'" : "") + ">" + (request.game.state.end ? opponent.state.points : "") + "</div>"
+						content += 		"<div class='name'>" + opponent.name + "</div>"
+						content += "</button>"
+					}
 				}
 				content += "</div>"
 
