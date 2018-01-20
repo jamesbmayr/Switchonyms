@@ -94,6 +94,11 @@
 			width: 100px;
 		}
 
+	/* code */
+		#code {
+			margin-bottom: 100px;
+		}
+
 	/* colors */
 		.redtext {
 			text-transform: uppercase;

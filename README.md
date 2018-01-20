@@ -92,7 +92,7 @@ a chaotic party game of words and guesses: http://www.switchonyms.com
 |- /main/
 |   |- logic.js (logError, logStatus, logMessage; getEnvironment, getAsset, getWord; isNumLet, isBot; renderHTML; generateRandom, chooseRandom, sortRandom; sanitizeString; determineSession, cleanDatabase)
 |   |- stylesheet.css
-|   |- script.js (isNumLet, sanitizeString, chooseRandom; displayError, buildWords, animateWords; sendPost, createSocket)
+|   |- script.js (isNumLet, isEmail, sanitizeString, chooseRandom; displayError, buildWords, animateWords; sendPost, createSocket)
 |   |
 |   |- banner.png
 |   |- logo.png

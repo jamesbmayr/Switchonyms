@@ -1,5 +1,8 @@
 /*** onload ***/
 	buildWords(30, true)
+	setTimeout(function () {
+		document.getElementById("logotype").className = "invisible"
+	}, 1000)
 
 /*** actions ***/
 	/* createGame */

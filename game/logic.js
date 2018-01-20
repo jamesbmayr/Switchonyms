@@ -312,7 +312,7 @@
 															}
 
 														// send message
-															callback(players, {success: true, message: ("victory: " + winners.join(" & ")), phase: 2, round: 4, ellipsis: true, opponents: clearList})
+															callback(players, {success: true, victory: winners, phase: 2, round: 4, ellipsis: true, opponents: clearList})
 													})
 											})
 									}
@@ -417,7 +417,7 @@
 		function createPointsdown(player, callback) {
 			try {
 				clearInterval(player.state.loop)
-				player.state.counter = 10000 / (player.state.points + 1)
+				player.state.counter = 10000 / (player.state.points + 1) / 2
 
 				player.state.loop = setInterval(function() {
 					if (player.state.counter > 0) {
@@ -606,18 +606,16 @@
 
 				// find winner
 					var victors = players.filter(function (p) {
-						return request.game.players[players[p]].state.points == max
+						return request.game.players[p].state.points == max
 					}) || []
 
-					var ids   = []
 					var names = []
 					for (var v in victors) {
-						ids.push(victors[v])
 						names.push(request.game.players[victors[v]].name)
 					}
 
 				// save & return
-					request.game.state.victory = ids
+					request.game.state.victory = names
 					request.game.state.end = new Date().getTime()
 
 					return names || []

@@ -166,6 +166,10 @@
 					for (var o in opponents) {
 						opponents[o].removeAttribute("selected")
 					}
+
+					if (post.round == 4) {
+						document.getElementById("again").innerText = post.victory.join(" & ") + " wins! play again?"
+					}
 				}
 
 			// message
@@ -208,7 +212,7 @@
 			// update opponent
 				else if (block.className == "opponent") {
 					var score = Array.from(block.querySelectorAll(".score"))[0]
-					if (opponent.points) {
+					if (opponent.points !== null) {
 						score.setAttribute("points", true)
 						score.innerText = opponent.points || 0
 					}

@@ -35,8 +35,9 @@
 			top: 50%;
 			left: 50%;
 			transform: translateX(-50%) translateY(-50%);
-			font-size: 150%;
+			font-size: 125%;
 			padding: 10px;
+			z-index: 5;
 		}
 
 		#card:not([round="0"]) #begin {
@@ -50,11 +51,12 @@
 			top: 50%;
 			left: 50%;
 			transform: translateX(-50%) translateY(-50%);
-			font-size: 150%;
+			font-size: 100%;
 			padding: 10px;
 			background-color: #111111;
 			color: #dddddd;
 			text-transform: uppercase;
+			z-index: 5;
 		}
 
 		#again:hover, #again:focus {
@@ -170,7 +172,7 @@
 		overflow: hidden;
 		text-overflow: ellipsis;
 		z-index: 2;
-		border-width: 4px 0px 4px 0px;
+		border-width: 0px;
 		cursor: default;
 	}
 
@@ -180,6 +182,7 @@
 		padding: 0px;
 		width: 70%;
 		height: 100%;
+		line-height: 2;
 	}
 
 	.player .score {
@@ -189,6 +192,7 @@
 		padding: 0px;
 		width: 30%;
 		height: 100%;
+		line-height: 2;
 	}
 
 	.player .score[flash] {
@@ -208,13 +212,18 @@
 		width: 100%;
 		height: 50%;
 		z-index: 3;
+		display: flex;
+		flex-wrap: wrap;
+		flex-direction: row;
+		align-items: stretch;
+		align-content: stretch;
 	}
 
 	.opponent {
 		float: left;
 		margin: 0px;
 		width: 50%;
-		height: 20%;
+		min-height: 20%;
 		font-size: 80%;
 		border: 0px;
 		text-align: center;
@@ -247,47 +256,51 @@
 		display: none;
 	}
 
+	.opponent .score[points] + .name {
+		display: none;
+	}
+
 	#card[phase="0"] + .player + #opponents .opponent[selected], #card[phase="1"] + .player + #opponents .opponent[selected] {
 		box-shadow: 0px 0px 25px #111111 inset;
 	}
 
 /*** colors ***/
-	[color="red"], [color="red"] div {
+	[color="red"] {
 		background-color: #ff6b69;	
 	}
 
-	[color="orange"], [color="orange"] div {
+	[color="orange"] {
 		background-color: #d89258;	
 	}
 
-	[color="yellow"], [color="yellow"] div {
+	[color="yellow"] {
 		background-color: #aba14d;	
 	}
 
-	[color="green"], [color="green"] div {
+	[color="green"] {
 		background-color: #67b873;	
 	}
 
-	[color="blue"], [color="blue"] div {
+	[color="blue"] {
 		background-color: #7493e4;	
 	}
 
-	[color="purple"], [color="purple"] div {
+	[color="purple"] {
 		background-color: #9367b5;	
 	}
 
-	[color="magenta"], [color="magenta"] div {
+	[color="magenta"] {
 		background-color: #bf466f;	
 	}
 
-	[color="cyan"], [color="cyan"] div {
+	[color="cyan"] {
 		background-color: #2b838e;	
 	}
 
-	[color="brown"], [color="brown"] div {
+	[color="brown"] {
 		background-color: #61483f;	
 	}
 
-	[color="gray"], [color="gray"] div {
+	[color="gray"] {
 		background-color: #70767b;	
 	}
