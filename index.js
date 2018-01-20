@@ -443,6 +443,20 @@
 										}
 										catch (error) {_400(error)}
 									break
+									
+									case "submitConfirm":
+										try {
+											game.submitConfirm(request, function (recipients, data) {
+												for (var r in recipients) {
+													try {
+														request.game.players[recipients[r]].connection.sendUTF(JSON.stringify(data))
+													}
+													catch (error) { main.logError(error) }
+												}
+											})
+										}
+										catch (error) {_400(error)}
+									break
 
 									default:
 										_400("invalid action")
