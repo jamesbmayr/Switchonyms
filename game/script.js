@@ -85,6 +85,23 @@
 				socket.send(JSON.stringify(post))
 			}
 		}
+	
+	/* submitConfirm */
+		document.getElementById("confirm").addEventListener("click", submitConfirm)
+		function submitConfirm(event) {
+			if (event.target.id !== "confirm") {
+				//
+			}
+			else if (!Number(document.getElementById("card").getAttribute("phase")) || !document.getElementById("card").getAttribute("ellipsis")) {
+				displayError("unable to confirm...")
+			}
+			else {
+				var post = {
+					action: "submitConfirm"
+				}
+				socket.send(JSON.stringify(post))
+			}
+		}
 
 /*** receives ***/
 	/* receivePost */
@@ -103,6 +120,7 @@
 					document.getElementById("card").removeAttribute("ellipsis")
 					document.getElementById("word").innerHTML = post.words.join("<br>")
 					document.getElementById("switch").removeAttribute("active")
+					document.getElementById("confirm").removeAttribute("active")
 					
 					document.getElementById("word").setAttribute("flash", true)
 					setTimeout(function() {
@@ -113,6 +131,7 @@
 				if (post.ellipsis !== undefined) {
 					document.getElementById("card").setAttribute("ellipsis", true)
 					document.getElementById("switch").removeAttribute("active")
+					document.getElementById("confirm").removeAttribute("active")
 					document.getElementById("word").innerHTML = ""
 				}
 
@@ -120,6 +139,14 @@
 				if (post.opponents !== undefined) {
 					for (var o in post.opponents) {
 						receiveOpponent(post.opponents[o])
+					}
+				}
+				if (post.confirm !== undefined) {
+					if (post.confirm) {
+						document.getElementById("confirm").setAttribute("active", true)
+					}
+					else {
+						document.getElementById("confirm").removeAttribute("active")
 					}
 				}
 
