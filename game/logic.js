@@ -176,17 +176,25 @@
 							}
 						
 						// unselecting opponent
-							if (!request.post.selecting) {
+							else if (!request.post.selecting) {
 								var wordee = request.game.players[request.session.id].state.selecting
-								request.game.players[wordee].state.selecting = null
-								request.game.players[request.session.id].state.selecting = null
+								if (wordee) {
+									request.game.players[wordee].state.selecting = null
+									request.game.players[request.session.id].state.selecting = null
+									callback([wordee], {success: true, ellipsis: true, confirm: false, message: "false alarm"})
+								}
 								
 								callback([request.session.id], {success: true})
-								callback([wordee], {success: true, ellipsis: true, confirm: false, message: "false alarm"})
 							}
 						
 						// selecting opponent
 							else {
+								var wordee = request.game.players[request.session.id].state.selecting
+								if (wordee) {
+									request.game.players[wordee].state.selecting = null
+									callback([wordee], {success: true, message: "false alarm", confirm: false})
+								}
+
 								request.game.players[request.session.id].state.selecting = request.post.opponent
 								request.game.players[request.post.opponent].state.selecting = request.session.id
 							
