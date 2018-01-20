@@ -25,6 +25,7 @@
 				content += 		"<button id='begin'>begin [" + request.game.id + "]</button>"
 				content += 		"<div id='word'>" + (player.state.words[0] ? player.state.words.join("<br>") : "") + "</div>"
 				content += 		"<button id='switch'" + (player.state.switching ? " active='true'": "") + "></button>"
+				content +=		"<button id='confirm'" + ((request.game.state.phase && player.state.selecting && !player.state.words[0]) ? " active='true'": "") + ">confirm</button>"
 				content += 		"<a id='again' href='../../'>play again?</a>"
 				content += "</div>"
 
