@@ -66,6 +66,21 @@
 			pointer-events: none;
 		}
 
+	/* confirm */
+		#confirm {
+			position: absolute;
+			top: 50%;
+			left: 50%;
+			transform: translateX(-50%) translateY(-50%);
+			font-size: 150%;
+			padding: 10px;
+		}
+
+		#confirm:not([active]) {
+			display: none;
+			pointer-events: none;
+		}
+
 	/* word */
 		#word {
 			position: absolute;
