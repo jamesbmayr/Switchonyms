@@ -318,7 +318,7 @@
 /*** handleSocket ***/
 	function handleSocket(request) {
 		// collect data
-			if ((request.origin.replace("https://","").replace("http://","") !== main.getEnvironment("domain")) && (request.origin !== "http://" + main.getEnvironment("domain") + ":" + main.getEnvironment("port"))) {
+			if ((request.origin.replace("https://","").replace("http://","").replace("www.","") !== main.getEnvironment("domain")) && (request.origin !== "http://" + main.getEnvironment("domain") + ":" + main.getEnvironment("port"))) {
 				request.reject()
 				main.logStatus("[REJECTED]: " + request.origin + " @ " + (request.socket._peername.address || "?"))
 			}
