@@ -52,6 +52,11 @@
 		function submitSwitch (request, callback) {
 			try {
 				request.game.updated = new Date().getTime()
+				
+				// errors
+					if (!request.game.state.start || request.game.state.end) {
+						callback([request.session.id], {success: false, message: "game not in play"})
+					}
 
 				// unrequesting switch
 					if (!request.post.active) {
@@ -94,7 +99,10 @@
 				var players = Object.keys(request.game.players)
 
 				// errors
-					if (!request.post.opponent || !main.isNumLet(request.post.opponent) || !request.game.players[request.post.opponent]) {
+					if (!request.game.state.start || request.game.state.end) {
+						callback([request.session.id], {success: false, message: "game not in play"})
+					}
+					else if (!request.post.opponent || !main.isNumLet(request.post.opponent) || !request.game.players[request.post.opponent]) {
 						callback([request.session.id], {success: false, message: "invalid opponent selection"})
 					}
 
@@ -159,104 +167,153 @@
 
 				// guess
 					else {
-						if (!request.game.players[request.session.id].state.words[0]) {
-							callback([request.session.id], {success: false, message: "you have no word"})
-						}
-						else if (request.game.players[request.post.opponent].state.words[0]) {
-							callback([request.session.id], {success: false, message: "opponent has a word"})
-						}
-						else {
-							// guess & reset
-								guessWord(request)
-
-							// new word
-								if (request.game.state.count < 10) {
-									resetPlayer(request.game.players[request.post.opponent])
-									assignWord(request, request.game.players[request.post.opponent])
-
-									// switch words ?
-										var active = players.find(function (p) {
-											return ((p !== request.post.opponent) && request.game.players[p].state.words[0] && request.game.players[p].state.switching)
-										}) || null
-										if (active) {
-											switchWords(request.game.players[active], request.game.players[request.post.opponent])
-											callback([active], {success: true, message: "switched!", phase: 1, words: request.game.players[active].state.words})
-										}
-
-									createPointsdown(request.game.players[request.post.opponent], callback)
-
-									callback([request.post.opponent], {success: true, message: "great guess!", phase: 1, words: request.game.players[request.post.opponent].state.words, points: request.game.players[request.post.opponent].state.points})
-									callback([request.session.id   ], {success: true, message: "got it!",      phase: 1, ellipsis: true})
-								}
-
-							// round end ?
-								else {
-									// clear pointsLoops & show points
-										var pointsList = []
-										var clearList  = []
-										for (var p in players) {
-											pointsList.push({id: players[p], points: request.game.players[players[p]].state.points})
-											clearList.push( {id: players[p], points: null})
-											resetPlayer(request.game.players[players[p]])
-										}
-
-									// message
-										var others = players.filter(function (p) {
-											return ((p !== request.session.id) && (p !== request.post.opponent))
-										})
-
-										callback([request.post.opponent], {success: true, message: "great guess! that's the last word!", ellipsis: true, points: request.game.players[request.post.opponent].state.points, opponents: pointsList})
-										callback([request.session.id   ], {success: true, message: "got it! that's the last word!", ellipsis: true, opponents: pointsList})
-										callback(others,                  {success: true, message: "that's the last word!", ellipsis: true, opponents: pointsList})
-
-									// match phase
-										if (request.game.state.round < 3) {
-											// instructions
-												beginCountdown(request, callback, function() {
-													callback(players, {success: true, message: "find a player with a matching word!"})
-													
-													// begin round
-														beginCountdown(request, callback, function() {
-															beginMatchPhase(request)
-
-															for (var p in players) {
-																callback([players[p]], {success: true, message: "matching time", phase: 0, round: request.game.state.round, words: request.game.players[players[p]].state.words, opponents: clearList})
-															}
-														})
-												})
-										}
-
-									// game end
-										else {
-											// instructions
-												beginCountdown(request, callback, function() {
-													callback(players, {success: true, message: "tallying up the final scores...", phase: 2, round: 4, ellipsis: true})
-
-													// begin end		
-														beginCountdown(request, callback, function() {
-															// find winners
-																var winners = beginVictoryPhase(request) || []
-
-															// get pointsList
-																var pointsList = []
-																var clearList  = []
-																for (var p in players) {
-																	pointsList.push({id: players[p], points: request.game.players[players[p]].state.points})
-																	clearList.push( {id: players[p], points: null})
-																}
-
-															// send message
-																callback(players, {success: true, message: ("victory: " + winners.join(" & ")), phase: 2, round: 4, ellipsis: true, opponents: clearList})
-														})
-												})
-										}
-								}
-						}
+						// errors
+							if (!request.game.players[request.session.id].state.words[0]) {
+								callback([request.session.id], {success: false, message: "you have no word"})
+							}
+							else if (request.game.players[request.post.opponent].state.words[0]) {
+								callback([request.session.id], {success: false, message: "opponent has a word"})
+							}
+						
+						// unselecting opponent
+							if (!request.post.selecting) {
+								var wordee = request.game.players[request.session.id].state.selecting
+								request.game.players[wordee].state.selecting = null
+								request.game.players[request.session.id].state.selecting = null
+								
+								callback([request.session.id], {success: true})
+								callback([wordee], {success: true, ellipsis: true, confirm: false, message: "false alarm"})
+							}
+						
+						// selecting opponent
+							else {
+								request.game.players[request.session.id].state.selecting = request.post.opponent
+								request.game.players[request.post.opponent].state.selecting = request.session.id
+							
+								callback([request.session.id], {success: true, message: "waiting for confirmation"})
+								callback([request.post.opponent], {success: true, message: "did you guess?", confirm: true})
+							}
 					}
 			}
 			catch (error) {
 				main.logError(error)
 				callback([request.session.id], {success: false, message: "unable to submit opponent"})
+			}
+		}
+	
+	/* submitConfirm */
+		module.exports.submitConfirm = submitConfirm
+		function submitConfirm(request, callback) {
+			try {
+				request.game.updated = new Date().getTime()
+				var players = Object.keys(request.game.players)
+
+				// errors
+					if (!request.game.state.start || request.game.state.end) {
+						callback([request.session.id], {success: false, message: "game not in play"})
+					}
+					else if (!request.game.state.phase) {
+						callback([request.session.id], {success: false, message: "not guess phase"})
+					}
+					else if (request.game.players[request.session.id].state.words[0]) {
+						callback([request.session.id], {success: false, message: "you have a word"})
+					}
+					else if (!request.game.players[request.session.id].state.selecting || (request.game.players[ request.game.players[request.session.id].state.selecting ].state.selecting !== request.session.id)) {
+						callback([request.session.id], {success: false, message: "you were not selected"})
+					}
+				
+				// guess & reset
+					else {
+						var worder = request.game.players[request.session.id].state.selecting
+						resetPlayer(request.game.players[worder])
+						guessWord(request)
+
+						// new word
+							if (request.game.state.count < 10) {
+								assignWord(request, request.game.players[request.session.id])
+
+								// switch words ?
+									var active = players.find(function (p) {
+										return ((p !== request.session.id) && request.game.players[p].state.words[0] && request.game.players[p].state.switching)
+									}) || null
+									if (active) {
+										switchWords(request.game.players[active], request.game.players[request.session.id])
+										callback([active], {success: true, message: "switched!", phase: 1, words: request.game.players[active].state.words})
+									}
+
+								createPointsdown(request.game.players[request.session.id], callback)
+
+								callback([request.session.id], {success: true, message: "new word", phase: 1, confirm: false, words: request.game.players[request.session.id].state.words, points: request.game.players[request.session.id].state.points})
+								callback([worder],             {success: true, message: "got it!",  phase: 1, ellipsis: true})
+							}
+
+						// round end ?
+							else {
+								// clear pointsLoops & show points
+									var pointsList = []
+									var clearList  = []
+									for (var p in players) {
+										pointsList.push({id: players[p], points: request.game.players[players[p]].state.points})
+										clearList.push( {id: players[p], points: null})
+										resetPlayer(request.game.players[players[p]])
+									}
+
+								// message
+									var others = players.filter(function (p) {
+										return ((p !== request.session.id) && (p !== worder))
+									})
+
+									callback([request.session.id], {success: true, message: "great guess! that's the last word!", confirm: false, ellipsis: true, points: request.game.players[request.session.id].state.points, opponents: pointsList})
+									callback([worder],             {success: true, message: "got it! that's the last word!", ellipsis: true, opponents: pointsList})
+									callback(others,               {success: true, message: "that's the last word!", ellipsis: true, opponents: pointsList})
+
+								// match phase
+									if (request.game.state.round < 3) {
+										// instructions
+											beginCountdown(request, callback, function() {
+												callback(players, {success: true, message: "find a player with a matching word!"})
+													
+												// begin round
+													beginCountdown(request, callback, function() {
+														beginMatchPhase(request)
+
+														for (var p in players) {
+															callback([players[p]], {success: true, message: "matching time", confirm: false, phase: 0, round: request.game.state.round, words: request.game.players[players[p]].state.words, opponents: clearList})
+														}
+													})
+											})
+									}
+
+								// game end
+									else {
+										// instructions
+											beginCountdown(request, callback, function() {
+												callback(players, {success: true, message: "tallying up the final scores...", phase: 2, round: 4, ellipsis: true})
+
+												// begin end		
+													beginCountdown(request, callback, function() {
+														// find winners
+															var winners = beginVictoryPhase(request) || []
+
+														// get pointsList
+															var pointsList = []
+															var clearList  = []
+															for (var p in players) {
+																pointsList.push({id: players[p], points: request.game.players[players[p]].state.points})
+																clearList.push( {id: players[p], points: null})
+															}
+
+														// send message
+															callback(players, {success: true, message: ("victory: " + winners.join(" & ")), phase: 2, round: 4, ellipsis: true, opponents: clearList})
+													})
+											})
+									}
+							}
+					}
+			}
+			catch (error) {
+				main.logError(error)
+				callback([request.session.id], {success: false, message: "unable to submit confirm"})
 			}
 		}
 
@@ -416,7 +473,7 @@
 					resetPlayer(request.game.players[request.session.id])
 
 				// award points
-					request.game.players[request.post.opponent].state.points += (request.game.state.round * 100)
+					request.game.players[request.session.id].state.points += (request.game.state.round * 100)
 			}
 			catch (error) {
 				main.logError(error)
