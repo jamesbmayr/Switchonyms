@@ -10,7 +10,7 @@
 		<script node>
 			var player = request.game.players[request.session.id]
 			var opponents = Object.keys(request.game.players).filter(function (p) {
-				return p !== request.session.id
+				return ((p !== request.session.id) && (request.game.players[p].connected))
 			})
 			null
 		</script>node>

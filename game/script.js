@@ -32,18 +32,10 @@
 				displayError("Unable to switch at this time...")
 			}
 			else {
-				if (event.target.getAttribute("active")) {
-					event.target.removeAttribute("active")
-					var active = false
-				}
-				else {
-					event.target.setAttribute("active", true)
-					var active = true
-				}
+				event.target.setAttribute("active", true)
 
 				var post = {
-					action: "submitSwitch",
-					active: active
+					action: "submitSwitch"
 				}
 				socket.send(JSON.stringify(post))
 			}
@@ -176,6 +168,9 @@
 				if (post.message) {
 					displayError(post.message)
 				}
+				if (post.location) {
+					window.location = post.location
+				}
 		}
 
 	/* receiveOpponent */
@@ -183,8 +178,15 @@
 			// find opponent
 				var block = document.getElementById(opponent.id) || null
 
+			// remove opponent
+				if (opponent.remove) {
+					if (block) {
+						block.remove()
+					}
+				}
+
 			// add opponent
-				if (!block) {
+				else if (!block) {
 					var block = document.createElement("button")
 						block.id = opponent.id
 						block.className = "opponent"
@@ -202,11 +204,6 @@
 					block.appendChild(name)
 
 					document.getElementById("opponents").appendChild(block)
-				}
-
-			// remove opponent
-				else if (opponent.remove) {
-					block.remove()
 				}
 
 			// update opponent

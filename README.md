@@ -67,7 +67,7 @@ a chaotic party game of words and guesses: http://www.switchonyms.com
 
 • The player who guesses the word gets points. But players lose points while they have a word.
 
-• If both players get stuck, they can switch words using the "S" button.
+• When players get stuck, they can switch words using the "S" button.
 
 
 
@@ -110,7 +110,7 @@ a chaotic party game of words and guesses: http://www.switchonyms.com
 |   |- script.js (submitFeedback)
 |
 |- /game/
-    |- logic.js (submitBegin, submitSwitch, submitOpponent; addPlayer, removePlayer, resetPlayer, createPointsdown; assignWord, matchWords, guessWord, switchWords; beginCountdown, beginMatchPhase, beginGuessPhase, beginVictoryPhase)
+    |- logic.js (submitBegin, submitSwitch, submitOpponent; addPlayer, removePlayer, resetPlayer, createPointsdown; assignWord, matchWords, guessWord; beginCountdown, beginMatchPhase, beginGuessPhase, beginVictoryPhase)
     |- index.html
     |- stylesheet.css
     |- script.js (submitBegin, submitSwitch, submitOpponent; receivePost, receiveOpponent)

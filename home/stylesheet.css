@@ -101,7 +101,7 @@
 		#createGame {
 			float: left;
 			display: block;
-			width: calc(100% - 4px);
+			width: 100%;
 			text-align: center;
 			line-height: 1;
 			font-size: 100%;
@@ -111,7 +111,7 @@
 
 		#joinGame {
 			float: left;
-			width: calc(40% - 4px);
+			width: 40%;
 			text-align: center;
 			line-height: 1;
 			font-size: 100%;

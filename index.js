@@ -322,8 +322,11 @@
 				request.reject()
 				main.logStatus("[REJECTED]: " + request.origin + " @ " + (request.socket._peername.address || "?"))
 			}
-			else {
+			else if (!request.connection) {
 				request.connection = request.accept(null, request.origin)
+				parseSocket()
+			}
+			else {
 				parseSocket()
 			}
 
@@ -358,7 +361,8 @@
 					// on connect
 						game.addPlayer(request, function (recipients, data) {
 							if (!data.success) {
-								_400(data.message || "unable to connect")
+								request.connection.sendUTF(JSON.stringify({success: false, location: "../../"}))
+								request.connection.close()
 							}
 							else {
 								for (var r in recipients) {

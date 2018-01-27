@@ -28,9 +28,23 @@
 
 						// instructions
 							beginCountdown(request, callback, function() {
-								callback(players, {success: true, message: "find a player with a matching word - but don't say your words!"})
+								setTimeout(function() {
+									callback(players, {success: true, message: "there are 3 rounds: nouns, verbs, & adjectives"})
+								}, 0)
 
-								// begin round
+								setTimeout(function() {
+									callback(players, {success: true, message: "each round has 2 phases: matching & guessing"})
+								}, 5000)
+
+								setTimeout(function() {
+									callback(players, {success: true, message: "matching: find another player with 1 of your words"})
+								}, 10000)
+
+								setTimeout(function() {
+									callback(players, {success: true, message: "give clues, but don't say your words!"})
+								}, 15000)
+
+								setTimeout(function() {
 									beginCountdown(request, callback, function() {
 										beginMatchPhase(request)
 										
@@ -38,6 +52,7 @@
 											callback([players[p]], {success: true, message: "matching time", phase: 0, round: 1, words: request.game.players[players[p]].state.words})
 										}
 									})
+								}, 20000)
 							})
 					}
 			}
@@ -58,31 +73,10 @@
 						callback([request.session.id], {success: false, message: "game not in play"})
 					}
 
-				// unrequesting switch
-					if (!request.post.active) {
-						request.game.players[request.session.id].state.switching = false
-						callback([request.session.id], {success: true})
-					}
-
-				// requesting switch
+				// new word
 					else {
-						// find switchee
-							var switchee = Object.keys(request.game.players).find(function (o) {
-								return ((o !== request.session.id) && request.game.players[o].state.words[0] && request.game.players[o].state.switching)
-							}) || null
-
-						// not ready to switch
-							if (!switchee) {
-								request.game.players[request.session.id].state.switching = true
-								callback([request.session.id], {success: true})
-							}
-						
-						// ready to switch
-							else {
-								switchWords(request.game.players[request.session.id], request.game.players[switchee])
-								callback([request.session.id], {success: true, message: "switched!", phase: 1, words: request.game.players[request.session.id].state.words})
-								callback([switchee          ], {success: true, message: "switched!", phase: 1, words: request.game.players[switchee].state.words})
-							}
+						assignWord(request, request.game.players[request.session.id])
+						callback([request.session.id], {success: true, message: "switched!", phase: 1, words: request.game.players[request.session.id].state.words})
 					}
 			}
 			catch (error) {
@@ -146,20 +140,55 @@
 
 										// instructions
 											beginCountdown(request, callback, function() {
-												callback([request.session.id, request.post.opponent], {success: true, message: "get someone to guess your word - but don't say it!"})
-												callback(others, {success: true, message: "guess the clue-givers' words to get points!"})
+												// first round instructions
+													if (request.game.state.round == 1) {
+														setTimeout(function() {
+															callback(players, {success: true, message: "guessing: 2 players have words they need others to guess"})	
+														}, 0)
 
-												// begin round
-													beginCountdown(request, callback, function() {
-														beginGuessPhase(request)
+														setTimeout(function() {
+															callback(players, {success: true, message: "if you have a word, give clues, don't say it!"})
+														}, 5000)
 
-														createPointsdown(request.game.players[request.session.id   ], callback)
-														createPointsdown(request.game.players[request.post.opponent], callback)
+														setTimeout(function() {
+															callback(players, {success: true, message: "if you get stuck, use the Switch button to get a new word"})
+														}, 10000)
 
-														callback([request.session.id   ], {success: true, message: "round " + request.game.state.round, phase: 1, round: request.game.state.round, words: request.game.players[request.session.id   ].state.words})
-														callback([request.post.opponent], {success: true, message: "round " + request.game.state.round, phase: 1, round: request.game.state.round, words: request.game.players[request.post.opponent].state.words})
-														callback(others,                  {success: true, message: "round " + request.game.state.round, phase: 1, round: request.game.state.round, ellipsis: true})
-													})
+														setTimeout(function() {
+															callback(players, {success: true, message: "everyone else: guess a word to get points!"})
+														}, 15000)
+
+														setTimeout(function() {
+															beginCountdown(request, callback, function() {
+																beginGuessPhase(request)
+
+																createPointsdown(request.game.players[request.session.id   ], callback)
+																createPointsdown(request.game.players[request.post.opponent], callback)
+
+																callback([request.session.id   ], {success: true, message: "round " + request.game.state.round, phase: 1, round: request.game.state.round, words: request.game.players[request.session.id   ].state.words})
+																callback([request.post.opponent], {success: true, message: "round " + request.game.state.round, phase: 1, round: request.game.state.round, words: request.game.players[request.post.opponent].state.words})
+																callback(others,                  {success: true, message: "round " + request.game.state.round, phase: 1, round: request.game.state.round, ellipsis: true})
+															})
+														}, 20000)
+													}
+
+												// subsequent rounds
+													else {
+														callback([request.session.id, request.post.opponent], {success: true, message: "get someone to guess your word!"})
+														callback(others, {success: true, message: "guess the clue-givers' words to get points!"})
+
+														// begin round
+															beginCountdown(request, callback, function() {
+																beginGuessPhase(request)
+
+																createPointsdown(request.game.players[request.session.id   ], callback)
+																createPointsdown(request.game.players[request.post.opponent], callback)
+
+																callback([request.session.id   ], {success: true, message: "round " + request.game.state.round, phase: 1, round: request.game.state.round, words: request.game.players[request.session.id   ].state.words})
+																callback([request.post.opponent], {success: true, message: "round " + request.game.state.round, phase: 1, round: request.game.state.round, words: request.game.players[request.post.opponent].state.words})
+																callback(others,                  {success: true, message: "round " + request.game.state.round, phase: 1, round: request.game.state.round, ellipsis: true})
+															})
+													}
 											})
 									}
 							}
@@ -240,15 +269,6 @@
 							if (request.game.state.count < 10) {
 								assignWord(request, request.game.players[request.session.id])
 
-								// switch words ?
-									var active = players.find(function (p) {
-										return ((p !== request.session.id) && request.game.players[p].state.words[0] && request.game.players[p].state.switching)
-									}) || null
-									if (active) {
-										switchWords(request.game.players[active], request.game.players[request.session.id])
-										callback([active], {success: true, message: "switched!", phase: 1, words: request.game.players[active].state.words})
-									}
-
 								createPointsdown(request.game.players[request.session.id], callback)
 
 								callback([request.session.id], {success: true, message: "new word", phase: 1, confirm: false, words: request.game.players[request.session.id].state.words, points: request.game.players[request.session.id].state.points})
@@ -277,44 +297,42 @@
 
 								// match phase
 									if (request.game.state.round < 3) {
-										// instructions
-											beginCountdown(request, callback, function() {
-												callback(players, {success: true, message: "find a player with a matching word!"})
-													
-												// begin round
-													beginCountdown(request, callback, function() {
-														beginMatchPhase(request)
+										beginCountdown(request, callback, function() {
+											callback(players, {success: true, message: "find a player with a matching word!"})
+												
+											// begin round
+												beginCountdown(request, callback, function() {
+													beginMatchPhase(request)
 
-														for (var p in players) {
-															callback([players[p]], {success: true, message: "matching time", confirm: false, phase: 0, round: request.game.state.round, words: request.game.players[players[p]].state.words, opponents: clearList})
-														}
-													})
-											})
+													for (var p in players) {
+														callback([players[p]], {success: true, message: "matching time", confirm: false, phase: 0, round: request.game.state.round, words: request.game.players[players[p]].state.words, opponents: clearList})
+													}
+												})
+										})
 									}
 
 								// game end
 									else {
-										// instructions
-											beginCountdown(request, callback, function() {
-												callback(players, {success: true, message: "tallying up the final scores...", phase: 2, round: 4, ellipsis: true})
+										beginCountdown(request, callback, function() {
+											callback(players, {success: true, message: "take a look at the final scores...", phase: 2, round: 4, ellipsis: true})
 
-												// begin end		
-													beginCountdown(request, callback, function() {
-														// find winners
-															var winners = beginVictoryPhase(request) || []
+											// begin end		
+												beginCountdown(request, callback, function() {
+													// find winners
+														var winners = beginVictoryPhase(request) || []
 
-														// get pointsList
-															var pointsList = []
-															var clearList  = []
-															for (var p in players) {
-																pointsList.push({id: players[p], points: request.game.players[players[p]].state.points})
-																clearList.push( {id: players[p], points: null})
-															}
+													// get pointsList
+														var pointsList = []
+														var clearList  = []
+														for (var p in players) {
+															pointsList.push({id: players[p], points: request.game.players[players[p]].state.points})
+															clearList.push( {id: players[p], points: null})
+														}
 
-														// send message
-															callback(players, {success: true, victory: winners, phase: 2, round: 4, ellipsis: true, opponents: clearList})
-													})
-											})
+													// send message
+														callback(players, {success: true, victory: winners, phase: 2, round: 4, ellipsis: true, opponents: clearList})
+												})
+										})
 									}
 							}
 					}
@@ -331,15 +349,14 @@
 		function addPlayer(request, callback) {
 			try {
 				if (!request.game) {
-					request.reject()
 					callback([request.session.id], {success: false, message: "unable to find game"})
 				}
 				else if (!request.game.players[request.session.id]) {
-					request.reject()
 					callback([request.session.id], {success: false, message: "unable to find player in game"})
 				}
 				else {
 					// save connection
+						request.game.players[request.session.id].connected  = true
 						request.game.players[request.session.id].connection = request.connection
 
 					// new player
@@ -366,28 +383,36 @@
 		module.exports.removePlayer = removePlayer
 		function removePlayer(request, callback) {
 			try {
-				// remove player connection (keep data)
-					main.logStatus("[CLOSED]: " + request.path.join("/") + " @ " + (request.ip || "?"))
-					request.game.players[request.session.id].connection = null
+				main.logStatus("[CLOSED]: " + request.path.join("/") + " @ " + (request.ip || "?"))
+				if (request.game) {
 
-				// delete game ?
-					var opponents = Object.keys(request.game.players).filter(function (p) {
-						return request.game.players[p].connection
-					})
-
-					if (!opponents.length) {
-						callback({success: true, delete: true})
-					}
-				
-				// still players
-					else {
-						var player = {
-							id: request.session.id,
-							remove: true
+					// remove player or connection?
+						if (request.game.state.start) {
+							request.game.players[request.session.id].connected = false
+						}
+						else {
+							delete request.game.players[request.session.id]
 						}
 
-						callback(opponents, {success: true, opponents: [player]})
-					}
+					// delete game ?
+						var opponents = Object.keys(request.game.players).filter(function (p) {
+							return request.game.players[p].connected
+						}) || []
+
+						if (!opponents.length) {
+							callback([], {success: true, delete: true})
+						}
+					
+					// still players
+						else {
+							var player = {
+								id: request.session.id,
+								remove: true
+							}
+
+							callback(opponents, {success: true, opponents: [player]})
+						}
+				}
 			}
 			catch (error) {
 				main.logError(error)
@@ -402,7 +427,6 @@
 				player.state.words     = [null, null]
 				player.state.matches   = [null, null]
 				player.state.selecting = null
-				player.state.switching = false
 				player.state.counter   = 0
 				clearInterval(player.state.loop)
 				player.state.loop = null
@@ -482,24 +506,6 @@
 
 				// award points
 					request.game.players[request.session.id].state.points += (request.game.state.round * 100)
-			}
-			catch (error) {
-				main.logError(error)
-			}
-		}
-
-	/* switchWords */
-		module.exports.switchWords = switchWords
-		function switchWords(player, opponent) {
-			try {
-				// exchange words
-					var tempWord = player.state.words[0]
-					player.state.words[0] = opponent.state.words[0]
-					opponent.state.words[0] = tempWord
-
-				// unset switching
-					player.state.switching = false
-					opponent.state.switching = false
 			}
 			catch (error) {
 				main.logError(error)

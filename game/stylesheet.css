@@ -181,23 +181,17 @@
 		text-transform: uppercase;
 		padding: 0px;
 		width: 70%;
-		height: 100%;
-		line-height: 2;
 	}
 
 	.player .score {
 		float: left;
-		background-color: #111111;
-		color: #dddddd;
 		padding: 0px;
 		width: 30%;
-		height: 100%;
-		line-height: 2;
 	}
 
 	.player .score[flash] {
 		transition: 1s;
-		box-shadow: 0px 0px 25px #dddddd inset;
+		text-shadow: 0px 0px 25px #dddddd;
 	}
 
 	.player:hover, .player:focus {
@@ -224,6 +218,7 @@
 		margin: 0px;
 		width: 50%;
 		min-height: 20%;
+		max-height: 50%;
 		font-size: 80%;
 		border: 0px;
 		text-align: center;

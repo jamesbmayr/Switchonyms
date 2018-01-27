@@ -72,10 +72,10 @@
 							words:     [null, null],
 							matches:   [null, null],
 							selecting: null,
-							switching: false,
 							counter:   0,
 							loop:      null
 						}
+						player.connected = false
 						player.connection = null
 
 				// return value
