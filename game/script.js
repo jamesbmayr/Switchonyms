@@ -2,6 +2,17 @@
 	var socket = null
 	if ([0,1,2,3].includes(Number(document.getElementById("card").getAttribute("round")))) {
 		createSocket()
+
+		var checkLoop = setInterval(function() {
+			if (!socket) {
+				try {
+					createSocket()
+				}
+				catch (error) {
+					console.log(error)
+				}
+			}
+		}, 5000)
 	}
 
 /*** submits ***/
