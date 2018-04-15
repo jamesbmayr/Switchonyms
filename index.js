@@ -230,7 +230,7 @@
 									case "createGame":
 										try {
 											do {
-												id = main.generateRandom(null, 4)
+												id = main.generateRandom("abcdefghijklmnopqrstuvwxyz", 4)
 											}
 											while (db[id])
 											request.game = {id: id}
