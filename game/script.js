@@ -211,10 +211,12 @@
 
 					var name = document.createElement("span")
 						name.className = "name"
-						name.innerText = opponent.name
+						name.innerText = opponent.name || ""
 					block.appendChild(name)
 
-					document.getElementById("opponents").appendChild(block)
+					if (opponent.id && opponent.name) {
+						document.getElementById("opponents").appendChild(block)
+					}
 				}
 
 			// update opponent

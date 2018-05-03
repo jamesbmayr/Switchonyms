@@ -29,19 +29,19 @@
 						// instructions
 							beginCountdown(request, callback, function() {
 								setTimeout(function() {
-									callback(players, {success: true, message: "there are 3 rounds: nouns, verbs, & adjectives"})
+									callback(players, {success: true, message: "there are 3 rounds, each with 2 phases"})
 								}, 0)
 
 								setTimeout(function() {
-									callback(players, {success: true, message: "each round has 2 phases: matching & guessing"})
+									callback(players, {success: true, message: "in the matching phase, you have some random words"})
 								}, 5000)
 
 								setTimeout(function() {
-									callback(players, {success: true, message: "matching: find another player with 1 of your words"})
+									callback(players, {success: true, message: "an opponent's word matches yours - figure out who, then tap that name"})
 								}, 10000)
 
 								setTimeout(function() {
-									callback(players, {success: true, message: "give clues, but don't say your words!"})
+									callback(players, {success: true, message: "remember: give clues without saying your words"})
 								}, 15000)
 
 								setTimeout(function() {
@@ -143,15 +143,15 @@
 												// first round instructions
 													if (request.game.state.round == 1) {
 														setTimeout(function() {
-															callback(players, {success: true, message: "guessing: 2 players have words they need others to guess"})	
+															callback(players, {success: true, message: "in the guessing phase, 2 players have words - everyone else has to guess them"})	
 														}, 0)
 
 														setTimeout(function() {
-															callback(players, {success: true, message: "if you have a word, give clues, don't say it!"})
+															callback(players, {success: true, message: "if you have a word, give clues, but don't say it!"})
 														}, 5000)
 
 														setTimeout(function() {
-															callback(players, {success: true, message: "if you get stuck, use the Switch button to get a new word"})
+															callback(players, {success: true, message: "if you get stuck, use the [S] button to switch for a new word"})
 														}, 10000)
 
 														setTimeout(function() {
