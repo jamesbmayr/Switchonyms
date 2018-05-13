@@ -95,7 +95,7 @@
 			if (event.target.id !== "confirm") {
 				//
 			}
-			else if (!Number(document.getElementById("card").getAttribute("phase")) || !document.getElementById("card").getAttribute("ellipsis")) {
+			else if (!document.getElementById("card").getAttribute("ellipsis")) {
 				displayError("unable to confirm...")
 			}
 			else {
@@ -119,11 +119,12 @@
 						score.removeAttribute("flash")
 					}, 1000)
 				}
-				if (post.words !== undefined) {
+				if (post.word !== undefined) {
 					document.getElementById("card").removeAttribute("ellipsis")
-					document.getElementById("word").innerHTML = post.words.join("<br>")
+					document.getElementById("word").innerHTML = post.word
 					document.getElementById("switch").removeAttribute("active")
 					document.getElementById("confirm").removeAttribute("active")
+					if (document.querySelector("[selected]")) { document.querySelector("[selected]").removeAttribute("selected") }
 					
 					document.getElementById("word").setAttribute("flash", true)
 					setTimeout(function() {
@@ -135,6 +136,7 @@
 					document.getElementById("card").setAttribute("ellipsis", true)
 					document.getElementById("switch").removeAttribute("active")
 					document.getElementById("confirm").removeAttribute("active")
+					if (document.querySelector("[selected]")) { document.querySelector("[selected]").removeAttribute("selected") }
 					document.getElementById("word").innerHTML = ""
 				}
 
@@ -154,14 +156,6 @@
 				}
 
 			// parameters
-				if (post.phase !== undefined) {
-					document.getElementById("card").setAttribute("phase", Number(post.phase))
-
-					var opponents = Array.from(document.querySelectorAll(".opponent"))
-					for (var o in opponents) {
-						opponents[o].removeAttribute("selected")
-					}
-				}
 				if (post.round !== undefined) {
 					document.getElementById("card").setAttribute("round", Number(post.round))
 

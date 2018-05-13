@@ -21,11 +21,11 @@
 			<script node> /* card */
 				var content = ""
 
-				content += "<div id='card' " + (player.state.words[0] ? "" : " ellipsis='true'") + "' phase='" + String(request.game.state.phase) + "' round='" + String(request.game.state.round) + "'>"
+				content += "<div id='card' " + (player.state.word ? "" : " ellipsis='true'") + " round='" + String(request.game.state.round) + "'>"
 				content += 		"<button id='begin'>begin [" + request.game.id + "]</button>"
-				content += 		"<div id='word'>" + (player.state.words[0] ? player.state.words.join("<br>") : "") + "</div>"
+				content += 		"<div id='word'>" + (player.state.word ? player.state.word : "") + "</div>"
 				content += 		"<button id='switch'" + (player.state.switching ? " active='true'": "") + "></button>"
-				content +=		"<button id='confirm'" + ((request.game.state.phase && player.state.selecting && !player.state.words[0]) ? " active='true'": "") + ">confirm</button>"
+				content +=		"<button id='confirm'" + ((player.state.selecting && !player.state.word) ? " active='true'": "") + ">confirm</button>"
 				content += 		"<a id='again' href='../../'>" + (request.game.state.end ? (request.game.state.victory.join(" & ") + " wins! ") : "") + "play again?</a>"
 				content += "</div>"
 

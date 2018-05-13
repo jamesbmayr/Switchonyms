@@ -150,7 +150,7 @@
 			box-shadow: 0px 0px 25px #111111 inset;
 		}
 
-		#card[ellipsis] #switch, #card[phase="0"] #switch {
+		#card[ellipsis] #switch {
 			display: none;
 			pointer-events: none;
 		}
@@ -255,7 +255,7 @@
 		display: none;
 	}
 
-	#card[phase="0"] + .player + #opponents .opponent[selected], #card[phase="1"] + .player + #opponents .opponent[selected] {
+	#card + .player + #opponents .opponent[selected] {
 		box-shadow: 0px 0px 25px #111111 inset;
 	}
 
@@ -269,7 +269,7 @@
 	}
 
 	[color="yellow"] {
-		background-color: #aba14d;	
+		background-color: #ebe14d;	
 	}
 
 	[color="green"] {

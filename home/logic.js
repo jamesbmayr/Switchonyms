@@ -15,12 +15,12 @@
 						request.game.created = new Date().getTime()
 						request.game.updated = new Date().getTime()
 						request.game.state = {
-							start:   false,
-							end:     false,
-							victory: [],
-							count:   0,
-							phase:   0,
-							round:   0
+							start:    false,
+							end:      false,
+							victory:  [],
+							count:    0,
+							round:    0,
+							starters: []
 						}
 						request.game.players = []
 						request.game.words = {
@@ -69,8 +69,7 @@
 						player.color = main.chooseRandom(colors)
 						player.state = {
 							points:    0,
-							words:     [null, null],
-							matches:   [null, null],
+							word:      null,
 							selecting: null,
 							counter:   0,
 							loop:      null
