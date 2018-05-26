@@ -57,6 +57,10 @@
 								}, 21000)
 
 								setTimeout(function() {
+									callback(players, {success: true, message: "got a word? don't guess - get rid of it!"})
+								}, 25000)
+
+								setTimeout(function() {
 									beginCountdown(request, callback, function() {
 										beginGuessing(request)
 										
@@ -69,7 +73,7 @@
 											}
 										}
 									})
-								}, 25000)
+								}, 30000)
 							})
 					}
 			}
@@ -217,47 +221,57 @@
 
 								// next round
 									if (request.game.state.round < 3) {
-										beginCountdown(request, callback, function() {
-											callback(players, {success: true, message: ("ready for the " + (request.game.state.round == 1 ? "next" : "final") + " round?") })
-												
-											// begin round
-												beginCountdown(request, callback, function() {
-													beginGuessing(request)
+										setTimeout(function() {
+											callback(players, {success: true, message: "what a round! let's look at the scores:"})
+										}, 0)
 
-													for (var p in players) {
-														if (request.game.players[players[p]].state.word) {
-															callback([players[p]], {success: true, message: "here's your word...", round: request.game.state.round, word: request.game.players[players[p]].state.word, opponents: clearList})
-														}
-														else {
-															callback([players[p]], {success: true, message: "guessing time...", round: request.game.state.round, ellipsis: true, opponents: clearList})
-														}
+										setTimeout(function() {
+											callback(players, {success: true, message: (request.game.state.round == 1 ? "in round 2, the points are doubled!" : "in round 3, the points are tripled!") })
+										}, 5000)
+
+										setTimeout(function() {
+											callback(players, {success: true, message: "all right - remember to talk over each other!" })
+										}, 9000)
+											
+										setTimeout(function() {	
+											beginCountdown(request, callback, function() {
+												beginGuessing(request)
+
+												for (var p in players) {
+													if (request.game.players[players[p]].state.word) {
+														callback([players[p]], {success: true, message: "here's your word...", round: request.game.state.round, word: request.game.players[players[p]].state.word, opponents: clearList})
 													}
-												})
-										})
+													else {
+														callback([players[p]], {success: true, message: "guessing time...", round: request.game.state.round, ellipsis: true, opponents: clearList})
+													}
+												}
+											})
+										}, 12000)
 									}
 
 								// game end
 									else {
-										beginCountdown(request, callback, function() {
-											callback(players, {success: true, message: "here are the final scores...", ellipsis: true})
+										setTimeout(function() {
+											callback(players, {success: true, message: "what a game! here are the final scores:", ellipsis: true})
+										}, 0)
 
-											// begin end		
-												beginCountdown(request, callback, function() {
-													// find winners
-														var winners = beginVictory(request) || []
+										setTimeout(function() {		
+											beginCountdown(request, callback, function() {
+												// find winners
+													var winners = beginVictory(request) || []
 
-													// get pointsList
-														var pointsList = []
-														var clearList  = []
-														for (var p in players) {
-															pointsList.push({id: players[p], points: request.game.players[players[p]].state.points})
-															clearList.push( {id: players[p], points: null})
-														}
+												// get pointsList
+													var pointsList = []
+													var clearList  = []
+													for (var p in players) {
+														pointsList.push({id: players[p], points: request.game.players[players[p]].state.points})
+														clearList.push( {id: players[p], points: null})
+													}
 
-													// send message
-														callback(players, {success: true, victory: winners, round: 4, ellipsis: true, opponents: clearList})
-												})
-										})
+												// send message
+													callback(players, {success: true, victory: winners, round: 4, ellipsis: true, opponents: clearList})
+											})
+										}, 5000)
 									}
 							}
 					}
