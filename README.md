@@ -1,6 +1,6 @@
 # Switchonyms
 
-a chaotic party game of words and guesses: http://www.switchonyms.com
+a chaotic party game of words and guesses: https://jamesmayr.com/switchonyms
 
 <pre style='line-height: 0.5; text-align: center'>
              |\ 

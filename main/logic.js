@@ -70,9 +70,9 @@
 								<meta name="keywords" content="game,word,guess,party,chaos,switch,swap,play"/>\
 								<meta name="author" content="James Mayr"/>\
 								<meta property="og:title" content="Switchonyms: a chaotic party game of words and guesses"/>\
-								<meta property="og:url" content="http://www.switchonyms.com"/>\
+								<meta property="og:url" content="https://jamesmayr.com/switchonyms"/>\
 								<meta property="og:description" content="Switchonyms is a chaotic party game of words and guesses."/>\
-								<meta property="og:image" content="http://www.switchonyms.com/banner.png"/>\
+								<meta property="og:image" content="https://jamesmayr.com/switchonyms/banner.png"/>\
 								<meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no"/>'
 					break
 
